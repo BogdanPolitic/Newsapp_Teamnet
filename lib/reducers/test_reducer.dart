@@ -1,6 +1,6 @@
 // lib/reducers/test_reducer.dart
 import 'package:redux/redux.dart';
-import 'package:news_app/actions/actions.dart';
+import 'package:Newsapp_Teamnet/actions/actions.dart';
 
 final testReducer = TypedReducer<bool, TestAction>(_testActionReducer);
 

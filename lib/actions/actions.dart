@@ -1,5 +1,7 @@
 class TestAction {
-  final bool testPayload;
+  bool testPayload;
 
-  TestAction(this.testPayload);
+  TestAction(this.testPayload) {
+    testPayload = !testPayload;
+  }
 }

@@ -4,12 +4,10 @@ import 'package:meta/meta.dart';
 class AppState {
   final bool reduxSetup;
 
+  final
+
   const AppState({
-    @required this.reduxSetup,
+    this.reduxSetup,
   });
 
-  @override
-  String toString() {
-    return 'AppState: {reduxSetup: $reduxSetup}';
-  }
 }
