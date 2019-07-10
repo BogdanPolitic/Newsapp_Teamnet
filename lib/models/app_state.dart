@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 class AppState {
   final bool reduxSetup;
 
-  final
+//  final
 
   const AppState({
     this.reduxSetup,
