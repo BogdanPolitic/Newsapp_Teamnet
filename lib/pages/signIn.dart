@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import './home.dart';
-import '../errors/passwordsNotMatching.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_logging/redux_logging.dart';
-import '../redux.dart';
+import '../models/app_state.dart';
+import '../reducers/app_reducer.dart';
+import '../actions/actions.dart';
+import './homeMihnea.dart';
 
 class SignIn extends StatefulWidget {
   State<SignIn> createState() {
@@ -15,7 +16,7 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   Store<AppState> store =
-      Store(reducer, initialState: AppState('', '', ''), middleware: [
+      Store(appReducer, initialState: AppState(email: '', password: '', retypedPassword: ''), middleware: [
     LoggingMiddleware<dynamic>.printer(),
   ]);
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
@@ -110,7 +111,7 @@ class _SignInState extends State<SignIn> {
             .signInWithEmailAndPassword(
                 email: store.state.email, password: store.state.password);
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Home(user: user)));
+            context, MaterialPageRoute(builder: (context) => MyHome(user: user)));
       } catch (e) {
         print(e);
       }

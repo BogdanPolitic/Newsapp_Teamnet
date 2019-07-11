@@ -5,7 +5,9 @@ import '../errors/passwordsNotMatching.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_logging/redux_logging.dart';
-import '../redux.dart';
+import '../models/app_state.dart';
+import '../reducers/app_reducer.dart';
+import '../actions/actions.dart';
 
 class SignUp extends StatefulWidget {
   State<SignUp> createState() {
@@ -14,10 +16,11 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  Store<AppState> store =
-      Store(reducer, initialState: AppState('', '', ''), middleware: [
-    LoggingMiddleware<dynamic>.printer(),
-  ]);
+  Store<AppState> store = Store(appReducer,
+      initialState: AppState(email: '', password: '', retypedPassword: ''),
+      middleware: [
+        LoggingMiddleware<dynamic>.printer(),
+      ]);
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   Widget build(BuildContext context) {
