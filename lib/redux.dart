@@ -1,31 +1,31 @@
 class AppState {
-  String _email;
-  String _password;
-  String _retypedPassword;
-  AppState(this._email, this._password, this._retypedPassword);
+  String email;
+  String password;
+  String retypedPassword;
+  AppState(this.email, this.password, this.retypedPassword);
 }
 
-class Action {
-  String action;
+class UpdateEmail {
   String value;
-  Action(this.action, this.value);
+  UpdateEmail(this.value);
+}
+class UpdatePassword {
+  String value;
+  UpdatePassword(this.value);
+}
+class UpdateRetypedPassword {
+  String value;
+  UpdateRetypedPassword(this.value);
 }
 
-enum Actions {
-  update_email,
-  update_password,
-  update_retypedPassword
-}
-
-AppState reducer(AppState prev, action) {
-  switch (action.action) {
-    case Actions.update_email:
-      return AppState(action.value, prev._password, prev._retypedPassword);
-    case Actions.update_password:
-      return AppState(prev._email, action.value, prev._retypedPassword);
-    case Actions.update_retypedPassword:
-      return AppState(prev._email, prev._password, action.value);
-    default:
-      return null;
+AppState reducer(AppState prev, dynamic action) {
+  if (action is UpdateEmail) {
+    return AppState(action.value, prev.password, prev.retypedPassword);
+  } else if (action is UpdatePassword) {
+    return AppState(prev.email, action.value, prev.retypedPassword);
+  } else if (action is UpdateRetypedPassword) {
+    return AppState(prev.email, prev.password, action.value);
+  } else {
+    return null;
   }
 }

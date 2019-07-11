@@ -28,8 +28,9 @@ dependencies:
   vector_math: ^2.0.8
   font_awesome_flutter: 8.4.0
   firebase_auth: ^0.11.1+7
-
-
+  redux: ^3.0.0
+  flutter_redux: ^0.5.3
+  redux_logging: ^0.3.0
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class PasswordsNotMatching extends StatefulWidget {
+  List<String> messages = [];
+  PasswordsNotMatching({this.messages});
   State<PasswordsNotMatching> createState() {
     return PasswordsNotMatchingState();
   }
@@ -19,7 +21,7 @@ class PasswordsNotMatchingState extends State<PasswordsNotMatching> {
                 children: <Widget>[
                   Center(
                     child: Text(
-                      'Whoops!',
+                      widget.messages[0],
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
@@ -28,7 +30,7 @@ class PasswordsNotMatchingState extends State<PasswordsNotMatching> {
                   ),
                   Center(
                     child: Text(
-                      'Passwords not matching!',
+                      widget.messages[1],
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
@@ -37,7 +39,7 @@ class PasswordsNotMatchingState extends State<PasswordsNotMatching> {
                   ),
                   Center(
                     child: Text(
-                      'Try again.',
+                      widget.messages[2],
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
