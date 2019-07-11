@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:Newsapp_Teamnet/models/models.dart';
-import 'package:Newsapp_Teamnet/reducers/app_reducer.dart';
-import 'package:Newsapp_Teamnet/actions/actions.dart';
+import 'models/models.dart';
+import 'reducers/app_reducer.dart';
+import 'actions/actions.dart';
 
 void main() {
   final store = Store<AppState>(
