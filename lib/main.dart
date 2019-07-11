@@ -35,6 +35,10 @@ void main() {
 }
 
 class MyHomeApp extends StatelessWidget {
+  bool valBox = false;
+  void mkasomthing(bool valBox) {
+    valBox = !valBox;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,22 +53,42 @@ class MyHomeApp extends StatelessWidget {
                   Container(
                     margin: const EdgeInsets.all(5),
                     width: MediaQuery.of(context).size.width * 0.25,
-                    height: MediaQuery.of(context).size.width * 0.25,
+                    height: MediaQuery.of(context).size.height * 0.125,
                     decoration: BoxDecoration(
                       color: Colors.red,
                       shape: BoxShape.circle,
                     ),
                   ),
-                  Text('user\'s name here'),
-                  Text('user\'s email here'),
+                  Text(
+                    'user\'s name here',
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.height * 0.021,
+                    ),
+                  ),
+                  Text(
+                    'user\'s email here',
+                    style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.height * 0.021,
+                    ),
+                  ),
                 ],
               ),
               decoration: BoxDecoration(color: Colors.blue),
             ),
             ExpansionTile(
-              title: Text('Filters'),
+              title: Text(
+                'Filters',
+                style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.height * 0.025,
+                ),
+              ),
               children: <Widget>[
-                MakeFilterButtons(),
+                CheckboxListTile(
+                  value: valBox,
+                  onChanged: mkasomthing,
+                )
+//                ListView(),
+//                MakeFilterButtons(),
               ],
             ),
           ],
@@ -82,9 +106,17 @@ class MyHomeApp extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('Redux is working: $reduxSetup'),
+                Text(
+                  'Redux is working: $reduxSetup',
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.height * 0.021),
+                ),
                 RaisedButton(
-                  child: Text('Dispatch action'),
+                  child: Text(
+                    'Dispatch action',
+                    style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.021),
+                  ),
                   onPressed: () => StoreProvider.of<AppState>(context)
                       .dispatch(TestAction(someVar)),
                 ),

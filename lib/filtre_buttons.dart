@@ -4,7 +4,6 @@ import 'package:redux/redux.dart';
 import 'models/app_state.dart';
 
 class ButtonBeLike extends StatelessWidget {
-
   int buttonIdx;
 
   ButtonBeLike(int buttonIdx) {
