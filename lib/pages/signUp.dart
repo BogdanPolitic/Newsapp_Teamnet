@@ -15,7 +15,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   Store<AppState> store =
-  Store(reducer, initialState: AppState('', '', ''), middleware: [
+      Store(reducer, initialState: AppState('', '', ''), middleware: [
     LoggingMiddleware<dynamic>.printer(),
   ]);
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
@@ -40,46 +40,40 @@ class _SignUpState extends State<SignUp> {
                           converter: (store) => store.state.email,
                           builder: (context, arg) => TextFormField(
                             validator: (input) {
-                              if (input.length < 5)
-                                return 'Invalid e-mail';
+                              if (input.length < 5) return 'Invalid e-mail';
                             },
                             onSaved: (input) {
                               //_email = input;
                               store.dispatch(UpdateEmail(input));
                             },
-                            decoration:
-                            InputDecoration(labelText: 'E-mail'),
+                            decoration: InputDecoration(labelText: 'E-mail'),
                           ),
                         ),
                         StoreConnector<AppState, String>(
                           converter: (store) => store.state.password,
                           builder: (context, arg) => TextFormField(
                             validator: (input) {
-                              if (input.length < 5)
-                                return 'Invalid password';
+                              if (input.length < 5) return 'Invalid password';
                             },
                             onSaved: (input) {
                               //_password = input;
                               store.dispatch(UpdatePassword(input));
                               print('READ: ${store.state.password}');
                             },
-                            decoration:
-                            InputDecoration(labelText: 'Password'),
+                            decoration: InputDecoration(labelText: 'Password'),
                           ),
                         ),
                         StoreConnector<AppState, String>(
                           converter: (store) => store.state.retypedPassword,
                           builder: (context, arg) => TextFormField(
                             validator: (input) {
-                              if (input.length < 5)
-                                return 'Invalid password';
+                              if (input.length < 5) return 'Invalid password';
                             },
                             onSaved: (input) {
                               //_password = input;
                               store.dispatch(UpdateRetypedPassword(input));
                             },
-                            decoration:
-                            InputDecoration(labelText: 'Password'),
+                            decoration: InputDecoration(labelText: 'Password'),
                           ),
                         ),
                         StoreConnector<AppState, AppState>(
@@ -123,23 +117,35 @@ class _SignUpState extends State<SignUp> {
     if (_formState.validate()) {
       _formState.save();
       if (store.state.password != store.state.retypedPassword) {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => PasswordsNotMatching(
-                messages: ['Whoops!', 'Passwords not matching!', 'Try again.']
-            )));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PasswordsNotMatching(messages: [
+                      'Whoops!',
+                      'Passwords not matching!',
+                      'Try again.'
+                    ])));
       } else {
         try {
           FirebaseUser user = await FirebaseAuth.instance
               .createUserWithEmailAndPassword(
-              email: store.state.email, password: store.state.password);
+                  email: store.state.email, password: store.state.password);
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => SignIn()));
         } catch (e) {
           print(e);
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => PasswordsNotMatching(
-                  messages: ['Whoops!', 'This user already exists!', 'Try again.']
-              )));
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PasswordsNotMatching(
+                messages: [
+                  'Whoops!',
+                  'This user already exists!',
+                  'Try again.'
+                ],
+              ),
+            ),
+          );
         }
       }
     }
