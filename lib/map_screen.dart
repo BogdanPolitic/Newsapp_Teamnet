@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:redux/redux.dart';
+//import 'package:redux/redux.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
@@ -32,7 +32,7 @@ class MapScreenState extends State<MapScreen> {
     );
     _addGeoPoint(pos);
   }
-  static final LatLng _center = const LatLng(44.433561, 26.04878);
+  static final LatLng _center = const LatLng(44.4336306,26.0493213);
 
   Set<Marker> markers = Set();
   MapType _currentMapType = MapType.normal;
@@ -42,12 +42,35 @@ class MapScreenState extends State<MapScreen> {
   static Future<DocumentReference> _addGeoPoint(Position pos) async {
     var pos = await Geolocator().getCurrentPosition();
    GeoFirePoint point = Geoflutterfire().point(latitude: pos.latitude, longitude: pos.longitude);
-    return Firestore.instance.collection('locations').add({
+    return Firestore.instance.collection('newsCoord').add({
       'position' : point.data,
       'name' : 'TEST TEST'
     });
   }
 
+  loadMarkers() {
+    Firestore.instance.collection('newsCoord').getDocuments().then((docs) {
+        if(docs.documents.isNotEmpty){
+          for(int i=0;i<docs.documents.length;i++){
+             initMarker(docs.documents[i].data,docs.documents[i].documentID);
+          }
+        }
+      });
+  }
+
+  void initMarker(client, markerRef){
+    var markerIDVal = markerRef;
+    final MarkerId markerId = MarkerId(markerIDVal);
+
+   final Marker marker = Marker(
+     position: LatLng(client['location'].latitude, client['location'].longitude),
+     markerId: markerId,
+   );
+
+   setState(() {
+     markers.add(marker);
+   });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +150,7 @@ class MapScreenState extends State<MapScreen> {
   }
 
   void _onAddMarkerButtonPressed() {
-    InfoWindow infoWindow =
+   InfoWindow infoWindow =
     InfoWindow(title: "Location" + markers.length.toString());
     Marker marker = Marker(
       markerId: MarkerId(markers.length.toString()),
@@ -139,6 +162,13 @@ class MapScreenState extends State<MapScreen> {
       markers.add(marker);
     });
   }
+/*  //markers info
+  Marker marker = Marker(
+    markerId: MarkerId('romania'),
+    position: LatLng(44.4336306,26.0493213),
+    infoWindow: InfoWindow(title: 'News1'),
+    icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet)
+  ); */
 }
 
 
