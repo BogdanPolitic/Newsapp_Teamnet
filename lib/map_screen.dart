@@ -9,7 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:firebase_performance/firebase_performance.dart';
 //import 'package:firebase_analytics/observer.dart';
 
-void main() => runApp(MapScreen());
+
 class MapScreen extends StatefulWidget {
   @override
   State<MapScreen> createState() => MapScreenState();
@@ -32,7 +32,7 @@ class MapScreenState extends State<MapScreen> {
     );
     _addGeoPoint(pos);
   }
-  static final LatLng _center = const LatLng(32.7266, 74.8570);
+  static final LatLng _center = const LatLng(44.433561, 26.04878);
 
   Set<Marker> markers = Set();
   MapType _currentMapType = MapType.normal;
@@ -41,7 +41,7 @@ class MapScreenState extends State<MapScreen> {
 
   static Future<DocumentReference> _addGeoPoint(Position pos) async {
     var pos = await Geolocator().getCurrentPosition();
-    GeoFirePoint point = Geoflutterfire().point(latitude: pos.latitude, longitude: pos.longitude);
+   GeoFirePoint point = Geoflutterfire().point(latitude: pos.latitude, longitude: pos.longitude);
     return Firestore.instance.collection('locations').add({
       'position' : point.data,
       'name' : 'TEST TEST'
