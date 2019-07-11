@@ -1,10 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
+import 'models/app_state.dart';
 
 class ButtonBeLike extends StatelessWidget {
 
+  int buttonIdx;
+
+  ButtonBeLike(int buttonIdx) {
+    this.buttonIdx = buttonIdx;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Row (
+
+//    print(MediaQuery.of(context).size.width * 0.25);
+
+    return StoreConnector(
+      converter: (Store<AppState> store) => store.state,
+      builder: (BuildContext context, AppState appState) {
+        return Row (
+          children: <Widget>[
+            Icon(Icons.check_box_outline_blank),
+//            appState.buttonCheckers[buttonIdx] ?
+            SizedBox (
+              width: MediaQuery.of(context).size.width * 0.25,
+            ),
+          ],
+        );
+      }
 
     );
   }
@@ -28,6 +52,9 @@ class MakeFilterButtons extends StatelessWidget {
     FilterButtons('Celebrities'),
   ];
 
+  int returnNumList() {
+    return buttonFilterArr.length;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +62,7 @@ class MakeFilterButtons extends StatelessWidget {
       itemCount: buttonFilterArr.length,
       itemBuilder: (context, index) => GestureDetector(
 //        onTap: ,
-        child: ButtonBeLike(),
+        child: ButtonBeLike(index),
       ),
     );
   }
