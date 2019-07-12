@@ -381,7 +381,7 @@ void _settingModalBottomSheet(context, width, height, entry) {
       builder: (BuildContext context) {
         return ListView.builder(
             itemCount: 3,
-            itemExtent: 250,
+            itemExtent: null,
             itemBuilder: (context, index) => modalComponent(entry, index),
         );
       },
@@ -391,11 +391,23 @@ void _settingModalBottomSheet(context, width, height, entry) {
 Widget modalComponent(entry, index) {
   switch (index) {
     case 0:
-      return Text(entry.title + '0');
-    case 1:
-      return Text(entry.fullDescription + '2');
-    case 2:
       return Image.network(entry.imageUrl);
+    case 1:
+      return Container(
+        padding: EdgeInsets.only(top: 20, bottom: 20),
+        alignment: Alignment.center,
+        child:
+          Text(
+            entry.title,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
+            )
+          ),
+
+      );
+    case 2:
+      return Text(entry.fullDescription);
     default:
       return null;
   }
