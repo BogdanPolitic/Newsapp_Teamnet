@@ -7,7 +7,6 @@ import 'package:redux/redux.dart';
 import 'package:redux_logging/redux_logging.dart';
 import '../models/app_state.dart';
 import '../reducers/app_reducer.dart';
-import '../actions/actions.dart';
 
 class SignUp extends StatefulWidget {
   State<SignUp> createState() {
@@ -24,6 +23,7 @@ class _SignUpState extends State<SignUp> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   Widget build(BuildContext context) {
+    Map<String, String> _loginData = {};
     return StoreProvider<AppState>(
       store: store,
       child: Scaffold(
@@ -46,8 +46,7 @@ class _SignUpState extends State<SignUp> {
                               if (input.length < 5) return 'Invalid e-mail';
                             },
                             onSaved: (input) {
-                              //_email = input;
-                              store.dispatch(UpdateEmail(input));
+                              _loginData['email'] = input;
                             },
                             decoration: InputDecoration(labelText: 'E-mail'),
                           ),
@@ -60,8 +59,7 @@ class _SignUpState extends State<SignUp> {
                             },
                             onSaved: (input) {
                               //_password = input;
-                              store.dispatch(UpdatePassword(input));
-                              print('READ: ${store.state.password}');
+                              _loginData['password'] = input;
                             },
                             decoration: InputDecoration(labelText: 'Password'),
                           ),
@@ -74,20 +72,17 @@ class _SignUpState extends State<SignUp> {
                             },
                             onSaved: (input) {
                               //_password = input;
-                              store.dispatch(UpdateRetypedPassword(input));
+                              _loginData['retypedPassword'] = input;
                             },
                             decoration: InputDecoration(labelText: 'Password'),
                           ),
                         ),
-                        StoreConnector<AppState, AppState>(
-                          converter: (store) => store.state,
-                          builder: (context, arg) => RaisedButton(
+                        RaisedButton(
                             child: Text('Sign up'),
                             onPressed: () {
                               navigateToHome();
                             },
                           ),
-                        ),
                       ],
                     ),
                   ),

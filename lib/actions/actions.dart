@@ -1,24 +1,25 @@
-class TestAction {
-  bool testPayload;
+class TestAction {}
 
-  TestAction(this.testPayload) {
-    testPayload = !testPayload;
+class ChangeFilterCheckers {
+  int checkerVal;
+
+  ChangeFilterCheckers(int checkerNewVal, List<bool> myButtons) {
+    checkerVal = checkerNewVal;
+    myButtons[checkerNewVal];
   }
 }
 
 
 
-class UpdateEmail {
-  String value;
-  UpdateEmail(this.value);
+class UpdateLoginDataAction {
+  final String email;
+  final String password;
+  final String retypedPassword;
+  UpdateLoginDataAction({this.email, this.password, this.retypedPassword,});
 }
 
-class UpdatePassword {
-  String value;
-  UpdatePassword(this.value);
-}
-
-class UpdateRetypedPassword {
-  String value;
-  UpdateRetypedPassword(this.value);
-}
+class NavigateToHome {
+  final String email;
+final String password;
+final String retypedPassword;
+  NavigateToHome({this.email, this.password, this.retypedPassword,});}

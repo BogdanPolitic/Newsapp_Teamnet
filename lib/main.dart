@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:newsapp/pages/signIn.dart';
+import 'package:redux_logging/redux_logging.dart';
 import 'pages/welcome.dart';
 import 'package:flutter/services.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import './models/models.dart';
 import './models/app_state.dart';
 import './reducers/app_reducer.dart';
+import 'middleware/middleware.dart';
 //import './actions/actions.dart';
 //import './filtre_buttons.dart';
 
-bool someVar = false;
+class Keys {
+  static final navKey = GlobalKey<NavigatorState>();
+}
 
 void main() {
   final store = Store<AppState>(
     appReducer,
-    initialState: AppState.initial(), // Set initial state to false
+    initialState: AppState.initial(),
+    middleware: middlewares()
   );
 
   SystemChrome.setPreferredOrientations([
@@ -27,8 +32,12 @@ void main() {
     StoreProvider(
       store: store,
       child: MaterialApp(
+        navigatorKey: Keys.navKey,
         title: 'Flutter Redux Demo',
         home: MyApp(),
+        routes: {
+          '/login': (context) => SignIn()
+        },
       ),
     ),
   );

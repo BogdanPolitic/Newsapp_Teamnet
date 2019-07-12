@@ -17,23 +17,31 @@ class AppState {
     this.retypedPassword,
   });
 
+//  const AppState.checkerChange({})
+
   factory AppState.initial() {
     return AppState (
         reduxSetup: false,
-        buttonCheckers: new List<bool>.filled(5, true, growable: false),
-        email: null,
-        password: null,
-        retypedPassword: null,
+        buttonCheckers: List<bool>.filled(5, false, growable: false),
+        email: '',
+        password: '',
+        retypedPassword: '',
     );
   }
 
   AppState copyWith ({
     bool reduxSetup,
     List<bool> buttonCheckers,
+    String email,
+    String password,
+    String retypedPassword,
   }) {
     return AppState (
       reduxSetup: reduxSetup ?? this.reduxSetup,
       buttonCheckers: buttonCheckers ?? this.buttonCheckers,
+      email: email ?? this.email,
+      password: password ?? this.password,
+      retypedPassword: retypedPassword ?? this.retypedPassword,
     );
   }
 

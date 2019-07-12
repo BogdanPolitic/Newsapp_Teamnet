@@ -1,16 +1,15 @@
 // lib/main.dart
 // Gasit tutorial asemanator cu ce a facut Cristi astazi la prezentare
 import 'package:flutter/material.dart';
+import 'package:newsapp/models/app_state.dart';
+import 'package:newsapp/state_view_model.dart';
 //import 'package:flutter/services.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import '../models/models.dart';
 //import '../reducers/app_reducer.dart';
-import '../actions/actions.dart';
 import '../filtre_buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-//bool someVar = false;
 
 class MyHome extends StatelessWidget {
   FirebaseUser user;
@@ -18,6 +17,7 @@ class MyHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       drawer: Drawer(
         child: ListView(
@@ -72,15 +72,15 @@ class MyHome extends StatelessWidget {
         title: Text('Flutter Redux Demo'),
       ),
       // Connect to the store
-      body: StoreConnector<AppState, bool>(
-        converter: (Store<AppState> store) => store.state.reduxSetup,
-        builder: (BuildContext context, bool reduxSetup) {
+      body: StoreConnector<AppState, StateViewModel>(
+        converter: (Store<AppState> store) => StateViewModel.fromStore(store),
+        builder: (BuildContext context, StateViewModel stateViewModel) {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  'Redux is working: $reduxSetup',
+                  'Redux is working: ${stateViewModel.reduxSetup}',
                   style: TextStyle(
                     fontSize: MediaQuery.of(context).size.height * 0.021,
                   ),
@@ -92,8 +92,7 @@ class MyHome extends StatelessWidget {
                       fontSize: MediaQuery.of(context).size.height * 0.021,
                     ),
                   ),
-                  onPressed: () => StoreProvider.of<AppState>(context)
-                      .dispatch(TestAction(reduxSetup)),
+                  onPressed: () => stateViewModel.testAction,
                 ),
                 Text(
                   '${user.email}',
