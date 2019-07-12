@@ -144,10 +144,10 @@ class RadialAnimation extends StatelessWidget {
             // DEBUG
             FirebaseUser user = await FirebaseAuth.instance
                 .signInWithEmailAndPassword(
-                email: 'hello434343@gmail.com', password: 'worldd');
+                email: 'hello@gmail.com', password: 'worldd');
             // / DEBUG
 
-            Navigator.push(context, MaterialPageRoute(builder: (context) => Authentication()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => MyHome(user: user,)));
           },
         ),
       ),

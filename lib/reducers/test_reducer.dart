@@ -9,8 +9,9 @@ final reducers = combineReducers<AppState>([
 ]);
 
 AppState _testActionReducer(AppState state, TestAction action) {
+  print('${state.reduxSetup}');
   return state.copyWith(
-    reduxSetup: !state.reduxSetup
+    reduxSetup: !state.reduxSetup,
   );
 }
 

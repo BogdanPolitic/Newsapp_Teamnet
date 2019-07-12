@@ -4,8 +4,6 @@ import 'package:newsapp/state_view_model.dart';
 import 'package:redux/redux.dart';
 import 'models/app_state.dart';
 
-
-
 class FilterButtons {
   FilterButtons(this.name) {
     isChecked = false;

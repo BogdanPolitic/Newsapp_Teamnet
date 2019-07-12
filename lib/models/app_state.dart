@@ -8,7 +8,6 @@ class AppState {
   final String password;
   final String retypedPassword;
 
-
   const AppState({
     this.reduxSetup,
     this.buttonCheckers,

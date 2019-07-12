@@ -73,14 +73,14 @@ class MyHome extends StatelessWidget {
       ),
       // Connect to the store
       body: StoreConnector<AppState, StateViewModel>(
-        converter: (Store<AppState> store) => StateViewModel.fromStore(store),
-        builder: (BuildContext context, StateViewModel stateViewModel) {
+        converter: (store) => StateViewModel.fromStore(store),
+        builder: (context, StateViewModel stateViewModel) {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  'Redux is working: ${stateViewModel.reduxSetup}',
+                  'Redux is working: ${!stateViewModel.reduxSetup}',
                   style: TextStyle(
                     fontSize: MediaQuery.of(context).size.height * 0.021,
                   ),
@@ -92,7 +92,10 @@ class MyHome extends StatelessWidget {
                       fontSize: MediaQuery.of(context).size.height * 0.021,
                     ),
                   ),
-                  onPressed: () => stateViewModel.testAction,
+                  onPressed: () {
+                    print('aintrat');
+                    return stateViewModel.testAction();
+                  }
                 ),
                 Text(
                   '${user.email}',

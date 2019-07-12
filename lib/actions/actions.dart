@@ -1,4 +1,6 @@
-class TestAction {}
+class TestAction {
+
+}
 
 class ChangeFilterCheckers {
   int checkerVal;
@@ -9,8 +11,6 @@ class ChangeFilterCheckers {
   }
 }
 
-
-
 class UpdateLoginDataAction {
   final String email;
   final String password;
@@ -20,6 +20,6 @@ class UpdateLoginDataAction {
 
 class NavigateToHome {
   final String email;
-final String password;
-final String retypedPassword;
+  final String password;
+  final String retypedPassword;
   NavigateToHome({this.email, this.password, this.retypedPassword,});}

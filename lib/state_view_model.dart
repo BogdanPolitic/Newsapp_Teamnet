@@ -9,12 +9,17 @@ class StateViewModel {
   Function(String email, String password, String retypedPassword,) updateLoginData;
   Function(Map<String, String> loginData) navigateToHome;
 
-  StateViewModel({this.buttonCheckers, this.reduxSetup, this.testAction, this.updateLoginData, this.navigateToHome,});
+  StateViewModel({this.buttonCheckers, this.reduxSetup, this.testAction, this.updateLoginData, this.navigateToHome,}) {
+    print('aiciaici');
+  }
 
   factory StateViewModel.fromStore(Store<AppState> store) => StateViewModel(
     buttonCheckers: store.state.buttonCheckers,
     reduxSetup: store.state.reduxSetup,
-    testAction: () => store.dispatch(TestAction()),
+    testAction: () {
+      print('ENTEREDDDDDDD');
+      store.dispatch(TestAction());
+      },
     updateLoginData: (email, password, retypedPassword) => store.dispatch(UpdateLoginDataAction(
       email: email,
       password: password,

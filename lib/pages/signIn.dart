@@ -86,22 +86,6 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-//  void navigateToHome() async {
-//    final _formState = _key.currentState;
-//    if (_formState.validate()) {
-//      _formState.save();
-//      try {
-//        FirebaseUser user = await FirebaseAuth.instance
-//            .signInWithEmailAndPassword(
-//                email: store.state.email, password: store.state.password);
-//        Navigator.push(
-//            context, MaterialPageRoute(builder: (context) => MyHome(user: user)));
-//      } catch (e) {
-//        print(e);
-//      }
-//    }
-//  }
-
   void navigatePop() {
     Navigator.pop(context);
   }
