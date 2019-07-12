@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:news_app/map_screen_news.dart';
 
 //import 'package:firebase_performance/firebase_performance.dart';
 //import 'package:firebase_analytics/observer.dart';
@@ -63,11 +64,17 @@ class MapScreenState extends State<MapScreen> {
     var markerIDVal = markerRef;
     final MarkerId markerId = MarkerId(markerIDVal);
 
+    InfoWindow infoWindow = InfoWindow(
+      onTap: (){},
+      title: client['title'],
+    );
 
    final Marker marker = Marker(
      position: LatLng(client['location'].latitude, client['location'].longitude),
      markerId: markerId,
+   //  infoWindow: InfoWindow(title: 'News'),
    );
+
 
    setState(() {
      markers.add(marker);
@@ -77,6 +84,7 @@ class MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     loadMarkers();
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: new ThemeData(
@@ -104,19 +112,19 @@ class MapScreenState extends State<MapScreen> {
                 zoom: 11.0,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: new FloatingActionButton(
-                  onPressed: _onMapTypeButtonPressed,
-                  child: new Icon(
-                    Icons.map,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
+//            Padding(
+//              padding: const EdgeInsets.all(16.0),
+//              child: Align(
+//                alignment: Alignment.bottomLeft,
+//                child: new FloatingActionButton(
+//                  onPressed: _onMapTypeButtonPressed,
+//                  child: new Icon(
+//                    Icons.map,
+//                    color: Colors.white,
+//                  ),
+//                ),
+//              ),
+//            ),
 //            Padding(
 //              padding: const EdgeInsets.all(16.0),
 //              child: Align(
@@ -144,27 +152,15 @@ class MapScreenState extends State<MapScreen> {
     mapController.complete(controller);
   }
 
-  void _onMapTypeButtonPressed() {
-    setState(() {
-      _currentMapType = _currentMapType == MapType.normal
-          ? MapType.satellite
-          : MapType.normal;
-    });
-  }
-
-//  void _onAddMarkerButtonPressed() {
-//   InfoWindow infoWindow =
-//    InfoWindow(title: "Location" + markers.length.toString());
-//    Marker marker = Marker(
-//      markerId: MarkerId(markers.length.toString()),
-//      infoWindow: infoWindow,
-//      position: centerPosition,
-//      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-//    );
+//  void _onMapTypeButtonPressed() {
 //    setState(() {
-//      markers.add(marker);
+//      _currentMapType = _currentMapType == MapType.normal
+//          ? MapType.satellite
+//          : MapType.normal;
 //    });
 //  }
+
+
 /*  //markers info
   Marker marker = Marker(
     markerId: MarkerId('romania'),
@@ -172,6 +168,17 @@ class MapScreenState extends State<MapScreen> {
     infoWindow: InfoWindow(title: 'News1'),
     icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet)
   ); */
+
+//  Container(
+//      alignment: Alignment.bottomLeft,
+//      margin: EdgeInsets.symmetric(vertical: 20.0),
+//      height: 150.0,
+//      child: Text('lallala', style: TextStyle(fontWeight: FontWeight.bold)),
+//      color: Colors.blue,
+//
+//  ),
+
+
 }
 
 
