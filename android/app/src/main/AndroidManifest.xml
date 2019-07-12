@@ -12,6 +12,9 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="news_map"
         android:icon="@mipmap/ic_launcher">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCfK37im6k43A49hoYP_-Fv8MAiq94ndBQ" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -24,14 +27,14 @@
                  until Flutter renders its first frame. It can be removed if
                  there is no splash screen (such as the default splash screen
                  defined in @style/LaunchTheme). -->
-
+            <meta-data
+             android:name="io.flutter.app.android.SplashScreenUntilFirstFrame"
+             android:value="true" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCfK37im6k43A49hoYP_-Fv8MAiq94ndBQ" />
+
     </application>
 </manifest>

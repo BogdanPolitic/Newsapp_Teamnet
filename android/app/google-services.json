@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "666177519948",
+    "firebase_url": "https://simpleauth-dc5ee.firebaseio.com",
+    "project_id": "simpleauth-dc5ee",
+    "storage_bucket": "simpleauth-dc5ee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:666177519948:android:6bd10cff4af98295",
+        "android_client_info": {
+          "package_name": "com.example.newsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "666177519948-4t57323e04343e64j0sbdu07ioe7sh47.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfK37im6k43A49hoYP_-Fv8MAiq94ndBQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "666177519948-4t57323e04343e64j0sbdu07ioe7sh47.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

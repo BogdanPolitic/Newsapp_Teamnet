@@ -52,6 +52,7 @@ class MapScreenState extends State<MapScreen> {
     Firestore.instance.collection('newsCoord').getDocuments().then((docs) {
         if(docs.documents.isNotEmpty){
           for(int i=0;i<docs.documents.length;i++){
+            if(docs.documents[i] != null)
              initMarker(docs.documents[i].data,docs.documents[i].documentID);
           }
         }
@@ -61,6 +62,7 @@ class MapScreenState extends State<MapScreen> {
   void initMarker(client, markerRef){
     var markerIDVal = markerRef;
     final MarkerId markerId = MarkerId(markerIDVal);
+
 
    final Marker marker = Marker(
      position: LatLng(client['location'].latitude, client['location'].longitude),
@@ -74,6 +76,7 @@ class MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    loadMarkers();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: new ThemeData(
@@ -114,19 +117,19 @@ class MapScreenState extends State<MapScreen> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: new FloatingActionButton(
-                  onPressed: _onAddMarkerButtonPressed,
-                  child: new Icon(
-                    Icons.edit_location,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
+//            Padding(
+//              padding: const EdgeInsets.all(16.0),
+//              child: Align(
+//                alignment: Alignment.bottomCenter,
+//                child: new FloatingActionButton(
+//                  onPressed: _onAddMarkerButtonPressed,
+//                  child: new Icon(
+//                    Icons.edit_location,
+//                    color: Colors.white,
+//                  ),
+//                ),
+//              ),
+//            ),
           ],
         ),
       ),
@@ -149,19 +152,19 @@ class MapScreenState extends State<MapScreen> {
     });
   }
 
-  void _onAddMarkerButtonPressed() {
-   InfoWindow infoWindow =
-    InfoWindow(title: "Location" + markers.length.toString());
-    Marker marker = Marker(
-      markerId: MarkerId(markers.length.toString()),
-      infoWindow: infoWindow,
-      position: centerPosition,
-      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-    );
-    setState(() {
-      markers.add(marker);
-    });
-  }
+//  void _onAddMarkerButtonPressed() {
+//   InfoWindow infoWindow =
+//    InfoWindow(title: "Location" + markers.length.toString());
+//    Marker marker = Marker(
+//      markerId: MarkerId(markers.length.toString()),
+//      infoWindow: infoWindow,
+//      position: centerPosition,
+//      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+//    );
+//    setState(() {
+//      markers.add(marker);
+//    });
+//  }
 /*  //markers info
   Marker marker = Marker(
     markerId: MarkerId('romania'),

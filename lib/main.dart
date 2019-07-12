@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'map_screen.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  final Firestore firestore = Firestore.instance;
+  await firestore.settings(persistenceEnabled:false, timestampsInSnapshotsEnabled: true);
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
