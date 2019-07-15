@@ -1,120 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:newsapp/pages/signIn.dart';
+import 'pages/welcome.dart';
 import 'package:flutter/services.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import './models/app_state.dart';
+import './reducers/app_reducer.dart';
+import 'middleware/middleware.dart';
+//import './actions/actions.dart';
+//import './filtre_buttons.dart';
 
-import 'map_screen.dart';
-
-void main() async {
-  final Firestore firestore = Firestore.instance;
-  await firestore.settings(persistenceEnabled:false, timestampsInSnapshotsEnabled: true);
-  runApp(MyApp());
+class Keys {
+  static final navKey = GlobalKey<NavigatorState>();
 }
 
+void main() {
+  final store = Store<AppState>(
+      appReducer,
+      initialState: AppState.initial(),
+      middleware: middlewares()
+  );
+
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+
+  print('Initial state: ${store.state}');
+
+  runApp(
+    StoreProvider(
+      store: store,
+      child: MaterialApp(
+        navigatorKey: Keys.navKey,
+        title: 'Flutter Redux Demo',
+        home: MyApp(),
+        routes: {
+          '/login': (context) => SignIn()
+        },
+      ),
+    ),
+  );
+}
+//void main() => runApp(MyApp());
+
 class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+      home: Scaffold(
+        backgroundColor: Colors.black,
+        body: SizedBox.expand(
+          child: RadialMenu(),
+        ),
       ),
-      home: MapScreen(),
     );
   }
 }
-
-//class MyHomePage extends StatefulWidget {
-//
-//  @override
-//  MyHomePageState createState() => MyHomePageState();
-//}
-//
-//class MyHomePageState extends State<MyHomePage> {
-//
-//  @override
-//  void initState(){
-//    super.initState();
-//    SystemChrome.setPreferredOrientations([
-//      DeviceOrientation.portraitUp,
-//    ]);
-//  }
-//
-//  bool bigSwitchSort = false;
-//  bool switchSortDate = true;
-//  bool switchSortTitle = false;
-//
-//  void functionSwitchSortDate (bool val) {
-//    setState(() {
-//      print(val);
-//      switchSortDate = !switchSortDate;
-//      val = switchSortDate;
-//      return val;
-//    });
-//  }
-//  void functionSwitchSortTitle (bool val) {
-//    setState(() {
-//      print(val);
-//      switchSortTitle = !switchSortTitle;
-//      val = switchSortTitle;
-//      return val;
-//    });
-//  }
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return Scaffold(
-//        drawer: Drawer(
-//          child: ListView(
-//            children: <Widget>[
-//              DrawerHeader(
-//                child: Column(
-//                  crossAxisAlignment: CrossAxisAlignment.start,
-//                  children: <Widget>[
-//                    Container(
-//                      margin: const EdgeInsets.all(5),
-//                      width: MediaQuery.of(context).size.width * 0.25,
-//                      height: MediaQuery.of(context).size.width * 0.25,
-//                      decoration: BoxDecoration(
-//                        color: Colors.red,
-//                        shape: BoxShape.circle,
-//                      ),
-//                    ),
-//                    Text('user\'s name here'),
-//                    Text('user\'s email here'),
-//                  ],
-//                ),
-//                decoration: BoxDecoration(color: Colors.blue),
-//              ),
-//              ListTile(),
-//              ListTile(),
-//              ListTile(),
-//            ],
-//          ),
-//        ),
-//        appBar: AppBar(
-//          title: Text('Home'),
-//        ),
-//        body: Container(
-//          height: MediaQuery.of(context).size.width * 0.16,
-//          decoration: BoxDecoration(
-//            color: Colors.purple,
-//          ),
-//          child: Row(
-//            mainAxisAlignment: MainAxisAlignment.center,
-//            children: <Widget>[
-//              Switch(
-//                value: switchSortDate,
-//                onChanged: functionSwitchSortDate,
-//              ),
-//              Switch(
-//                value: switchSortTitle,
-//                onChanged: functionSwitchSortTitle,
-//              ),
-//            ],
-//          ),
-//
-//
-//        )
-//    );
-//  }
-//}

@@ -1,9 +1,11 @@
 // lib/reducers/app_reducer.dart
-import 'package:news_app/models/models.dart';
-import 'package:news_app/reducers/test_reducer.dart';
+import 'package:newsapp/models/app_state.dart';
 
-AppState appReducer(AppState state, action) {
-  return AppState(
-    reduxSetup: testReducer(state.reduxSetup, action),
-  );
+import '../reducers/test_reducer.dart';
+import '../actions/actions.dart';
+
+AppState appReducer(AppState state, dynamic action) {
+
+  return reducers(state, action);
+
 }

@@ -50,6 +50,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.0+6"
+  firebase_auth:
+    dependency: "direct main"
+    description:
+      name: firebase_auth
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.11.1+7"
+  firebase_core:
+    dependency: transitive
+    description:
+      name: firebase_core
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0+6"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -57,6 +71,13 @@ packages:
     version: "0.0.0"
   flutter_redux:
     dependency: "direct dev"
+    description:
+      name: flutter_redux
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.3"
+  flutter_redux:
+    dependency: "direct main"
     description:
       name: flutter_redux
       url: "https://pub.dartlang.org"
@@ -151,6 +172,21 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.22.0"
+    version: "2.0.2"
+  redux:
+    dependency: "direct main"
+    description:
+      name: redux
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
+  redux_logging:
+    dependency: "direct main"
+    description:
+      name: redux_logging
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.0"
   sky_engine:
     dependency: transitive
     description: flutter
