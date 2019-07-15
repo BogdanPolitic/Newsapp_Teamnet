@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
                   RaisedButton(
                     child: Text('Dispatch action'),
                     onPressed: () => StoreProvider.of<AppState>(context)
-                        .dispatch(TestAction(true)),
+                        .dispatch(TestAction()),
                   ),
                 ],
               ),
