@@ -5,22 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 int numCharactersOfPreview;
 
-class Entry {
-  final String title;
-  final String fullDescription;
-  final String imageUrl;
-
-  Entry(this.title, this.fullDescription, this.imageUrl);
-}
-
-class NewFormat {
-  final Widget title;
-  final Widget content;
-  final Widget image;
-
-  NewFormat(this.title, this.content, this.image);
-}
-
 class MyHome extends StatefulWidget {
   FirebaseUser user;
 
@@ -176,7 +160,6 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
 }
 
 class PageOne extends StatelessWidget {
-  List<Entry> entries = [];
   final FirebaseUser user;
   final AsyncSnapshot<DocumentSnapshot> snapshot;
 

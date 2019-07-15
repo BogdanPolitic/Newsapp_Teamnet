@@ -1,24 +1,22 @@
-class TestAction {
-  bool testPayload;
+class TestAction { }
+class ByNameOrDate { }
+class IncrOrDecr { }
 
-  TestAction(this.testPayload) {
-    testPayload = !testPayload;
-  }
+class ChangeChecker {
+  final int index;
+
+  ChangeChecker({this.index});
 }
 
-
-
-class UpdateEmail {
-  String value;
-  UpdateEmail(this.value);
+class UpdateLoginDataAction {
+  final String email;
+  final String password;
+  final String retypedPassword;
+  UpdateLoginDataAction({this.email, this.password, this.retypedPassword,});
 }
 
-class UpdatePassword {
-  String value;
-  UpdatePassword(this.value);
-}
-
-class UpdateRetypedPassword {
-  String value;
-  UpdateRetypedPassword(this.value);
-}
+class NavigateToHome {
+  final String email;
+  final String password;
+  final String retypedPassword;
+  NavigateToHome({this.email, this.password, this.retypedPassword,});}
