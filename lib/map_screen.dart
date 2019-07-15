@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-//import 'package:redux/redux.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:news_app/map_screen_news.dart';
-
-//import 'package:firebase_performance/firebase_performance.dart';
-//import 'package:firebase_analytics/observer.dart';
-
+//import 'package:news_app/map_screen_news.dart';
 
 class MapScreen extends StatefulWidget {
   @override
@@ -65,14 +60,17 @@ class MapScreenState extends State<MapScreen> {
     final MarkerId markerId = MarkerId(markerIDVal);
 
     InfoWindow infoWindow = InfoWindow(
-      onTap: (){},
+      onTap: (){
+        //Navigator.push(context, route)
+      },
       title: client['title'],
     );
 
    final Marker marker = Marker(
      position: LatLng(client['location'].latitude, client['location'].longitude),
      markerId: markerId,
-   //  infoWindow: InfoWindow(title: 'News'),
+     infoWindow: infoWindow,
+
    );
 
 
@@ -84,7 +82,6 @@ class MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     loadMarkers();
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: new ThemeData(
@@ -161,22 +158,6 @@ class MapScreenState extends State<MapScreen> {
 //  }
 
 
-/*  //markers info
-  Marker marker = Marker(
-    markerId: MarkerId('romania'),
-    position: LatLng(44.4336306,26.0493213),
-    infoWindow: InfoWindow(title: 'News1'),
-    icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet)
-  ); */
-
-//  Container(
-//      alignment: Alignment.bottomLeft,
-//      margin: EdgeInsets.symmetric(vertical: 20.0),
-//      height: 150.0,
-//      child: Text('lallala', style: TextStyle(fontWeight: FontWeight.bold)),
-//      color: Colors.blue,
-//
-//  ),
 
 
 }
