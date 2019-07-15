@@ -79,33 +79,60 @@ class MyHome extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Container (
-                  height: MediaQuery.of(context).size.height * 0.10,
+                  height: MediaQuery.of(context).size.height * 0.08,
                   decoration: BoxDecoration(
                     color: Colors.lightBlueAccent,
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Switch (
-                        activeColor: Colors.orangeAccent,
-                        activeTrackColor: Colors.white,
-                        inactiveThumbColor: Colors.orangeAccent,
-                        inactiveTrackColor: Colors.white,
-                        value: stateViewModel.switchNameOrDate,
-                        onChanged: (bool someVal) {
-                          print(stateViewModel.switchNameOrDate);
-                          stateViewModel.sortNameOrDate();
-                        },
+                      Container(
+                        child: Row(
+                          children: <Widget>[
+                            Text (
+                              'Title'
+                            ),
+                            Switch (
+                              activeColor: Colors.orangeAccent,
+                              activeTrackColor: Colors.white,
+                              inactiveThumbColor: Colors.orangeAccent,
+                              inactiveTrackColor: Colors.white,
+                              value: stateViewModel.switchNameOrDate,
+                              onChanged: (bool someVal) {
+                                print(stateViewModel.switchNameOrDate);
+                                stateViewModel.sortNameOrDate();
+                              },
+                            ),
+                            Text (
+                                'Date'
+                            ),
+                          ]
+                        ),
                       ),
-                      Switch (
-                        activeColor: Colors.orangeAccent,
-                        activeTrackColor: Colors.white,
-                        inactiveThumbColor: Colors.orangeAccent,
-                        inactiveTrackColor: Colors.white,
-                        value: stateViewModel.switchIncOrDec,
-                        onChanged: (bool someVal) {
-                          stateViewModel.sortIncOrDec();
-                        },
+                      VerticalDivider(
+                        color: Colors.white,
+                      ),
+                      Container(
+                        child: Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.arrow_upward,
+                            ),
+                            Switch (
+                              activeColor: Colors.orangeAccent,
+                              activeTrackColor: Colors.white,
+                              inactiveThumbColor: Colors.orangeAccent,
+                              inactiveTrackColor: Colors.white,
+                              value: stateViewModel.switchIncOrDec,
+                              onChanged: (bool someVal) {
+                                stateViewModel.sortIncOrDec();
+                              },
+                            ),
+                            Icon(
+                                Icons.arrow_downward,
+                            ),
+                          ],
+                        ),
                       ),
 
                     ],
