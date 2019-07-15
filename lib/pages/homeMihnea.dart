@@ -186,7 +186,6 @@ class PageOne extends StatelessWidget {
   Widget build(BuildContext context) {
     double _width = MediaQuery.of(context).size.width;
     double _height = MediaQuery.of(context).size.height;
-    //Widget newFormat = _populateEntries(snapshot);
     return StreamBuilder(
         stream: Firestore.instance
             .collection('usersAndNews')
@@ -197,79 +196,74 @@ class PageOne extends StatelessWidget {
           return ListView(
             children: snapshot.data.documents
                 .map((DocumentSnapshot document) => Container(
-              margin: EdgeInsets.all(5.0),
-              padding: EdgeInsets.all(5.0),
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    width: 1.0,
-                    color: Colors.grey,
-                    style: BorderStyle.solid,
-                  ),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    //height: MediaQuery.of(context).size.height * 0.2,
-                    child: Column(
-                      children: <Widget>[
-                        Text(
-                          document.data['title'],
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30,
-                          ),
-                        ),
-                        Text(
-                          previewOf(
-                            document.data['content'],
-                            85,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.2,
-                        height:
-                        MediaQuery.of(context).size.height * 0.1,
-                        decoration: BoxDecoration(
-                          border: Border.all(),
-                        ),
-                        child: FittedBox(
-                          child: Image.network(
-                            document.data['imageUrl'],
-                            fit: BoxFit.cover,
+                      margin: EdgeInsets.all(5.0),
+                      padding: EdgeInsets.all(5.0),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            width: 1.0,
+                            color: Colors.grey,
+                            style: BorderStyle.solid,
                           ),
                         ),
                       ),
-                      InkWell(
-                        child: Text('more details',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              fontStyle: FontStyle.italic,
-                            )),
-                        onTap: () {
-                          _settingModalBottomSheet(
-                              context,
-                              _width,
-                              _height,
-                              document,
-                              user
-                          );
-                        },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.6,
+                            //height: MediaQuery.of(context).size.height * 0.2,
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  document.data['title'],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 30,
+                                  ),
+                                ),
+                                Text(
+                                  previewOf(
+                                    document.data['content'],
+                                    85,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.2,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.1,
+                                decoration: BoxDecoration(
+                                  border: Border.all(),
+                                ),
+                                child: FittedBox(
+                                  child: Image.network(
+                                    document.data['imageUrl'],
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              InkWell(
+                                child: Text('more details',
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontStyle: FontStyle.italic,
+                                    )),
+                                onTap: () {
+                                  _settingModalBottomSheet(
+                                      context, _width, _height, document, user);
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ],
-              ),
-            ))
+                    ))
                 .toList(),
           );
         });
@@ -279,15 +273,106 @@ class PageOne extends StatelessWidget {
 class PageTwo extends StatelessWidget {
   final AsyncSnapshot<DocumentSnapshot> snapshot;
   final FirebaseUser user;
+
   PageTwo({this.snapshot, this.user});
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    double _width = MediaQuery.of(context).size.width;
+    double _height = MediaQuery.of(context).size.height;
+    return StreamBuilder(
+      stream: Firestore.instance.collection('usersAndNews').document('info').collection('users').document(user.uid).snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshotUser) {
+        return StreamBuilder(
+        stream: Firestore.instance
+            .collection('usersAndNews')
+            .document('info')
+            .collection('news')
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshotNew) {
+          return ListView(
+              children: snapshotNew.data.documents
+                  .map((DocumentSnapshot document) {
+                    return snapshotUser.data['favourites'][document.documentID] == null
+                        ? nullContainer()
+                        : Container(
+                      margin: EdgeInsets.all(5.0),
+                      padding: EdgeInsets.all(5.0),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            width: 1.0,
+                            color: Colors.grey,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.6,
+                            //height: MediaQuery.of(context).size.height * 0.2,
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  document.data['title'],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 30,
+                                  ),
+                                ),
+                                Text(
+                                  previewOf(
+                                    document.data['content'],
+                                    85,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.2,
+                                height:
+                                MediaQuery.of(context).size.height * 0.1,
+                                decoration: BoxDecoration(
+                                  border: Border.all(),
+                                ),
+                                child: FittedBox(
+                                  child: Image.network(
+                                    document.data['imageUrl'],
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              InkWell(
+                                child: Text('more details',
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontStyle: FontStyle.italic,
+                                    )),
+                                onTap: () {
+                                  _settingModalBottomSheet(
+                                      context, _width, _height, document, user);
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+              }).toList(),
+          );
+        });
+      }
+    );
   }
 }
 
-void _settingModalBottomSheet(
-    context, width, height, document, user) {
+void _settingModalBottomSheet(context, width, height, document, user) {
   //List<String> fields = ['title', 'content', 'imageUrl', 'buttons'];
   showModalBottomSheet(
     context: context,
@@ -301,16 +386,19 @@ void _settingModalBottomSheet(
   );
 }
 
-Widget modalComponent(document, field, user) {
-  Map<IconData, Function> buttonActionMap = {Icons.thumb_up : like, Icons.favorite : favourite};
+Widget modalComponent(documentNew, field, user) {
+  Map<IconData, Function> buttonActionMap = {
+    Icons.thumb_up: like,
+    Icons.favorite: favourite
+  };
   switch (field) {
     case 0:
-      return Image.network(document.data['imageUrl']);
+      return Image.network(documentNew.data['imageUrl']);
     case 1:
       return Container(
         padding: EdgeInsets.only(top: 20, bottom: 20),
         alignment: Alignment.center,
-        child: Text(document.data['title'],
+        child: Text(documentNew.data['title'],
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 30,
@@ -320,31 +408,49 @@ Widget modalComponent(document, field, user) {
       return Container(
         padding: EdgeInsets.only(left: 15, right: 15),
         child: Text(
-          '       ' + document.data['content'],
+          '       ' + documentNew.data['content'],
           textAlign: TextAlign.justify,
         ),
       );
     case 3:
-      return Container(
-        padding: EdgeInsets.only(top: 20, bottom: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [Icons.thumb_up, Icons.favorite]
-              .map((iconData) => InkWell(
-              child: Transform.scale(
-                scale: 2,
-                child: Icon(
-                  iconData,
-                  color: Colors.blue,
-                ),
+      return StreamBuilder(
+          stream: Firestore.instance
+              .collection('usersAndNews')
+              .document('info')
+              .collection('users')
+              .document(user.uid)
+              .snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            return Container(
+              padding: EdgeInsets.only(top: 20, bottom: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [Icons.thumb_up, Icons.favorite]
+                    .map(
+                      (iconData) => InkWell(
+                          child: Transform.scale(
+                            scale: 2,
+                            child: Icon(
+                              iconData,
+                              color: (iconData == Icons.thumb_up) && (snapshot.data['likes'][documentNew.documentID] == null)
+                                ? Colors.grey
+                                : Colors.blue,
+                            ),
+                          ),
+                          onTap: () {
+                            buttonActionMap[iconData](
+                                documentNew, Firestore.instance
+                                .collection('usersAndNews')
+                                .document('info')
+                                .collection('users')
+                                .document(user.uid), user, snapshot);
+                          }),
+                    )
+                    .toList(),
               ),
-              onTap: () {
-                buttonActionMap[iconData](document, user);
-              }
-          ),)
-              .toList(),
-        ),
-      );
+            );
+          });
     default:
       return nullContainer();
   }
@@ -354,31 +460,29 @@ String previewOf(String text, int numberOfCharacters) {
   return '    ' + text.substring(0, numberOfCharacters - 1) + '...';
 }
 
-Widget like(document, user) {
-  print('${user.email} liked ${document.data['title']} of the new with the ID = ${document.documentID}!');
-  return StreamBuilder(
-      stream: Firestore.instance.collection('usersAndNews').document('info').snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        return nullContainer();
-      }
-  );
+void like(documentNew, documentUser, user, snapshot) {
+  print(
+      '${user.email} liked ${documentNew.data['title']} of the new with the ID = ${documentNew.documentID}!');
+  //documentUser.updateData({'likes' : {documentNew.documentID : documentNew.documentID}});
+  var m = snapshot.data['likes'];
+  if (m[documentNew.documentID] == null)  // like
+    m[documentNew.documentID] = documentNew.documentID;
+  else  // un-like
+    m.remove(documentNew.documentID);
+  documentUser.updateData({'likes' : m});
 }
 
-Widget favourite(document, user) {
-  print('${user.email} favourited ${document['title']}! of the new with the ID = ${document.documentID}!');
-  List<String> favourites = document.data['favourites'];
-  favourites.add(document.documentID.toString());
-  document.data['favourites'].setData(favourites);
-  print('DECII : ' + document.uid.toString());
-  print("DECI: " + favourites.toString());
-  return StreamBuilder(
-      stream: Firestore.instance.collection('usersAndNews').document('info').snapshots(),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        print('AJUNG');
-        return nullContainer();
-      }
-  );
+void favourite(documentNew, documentUser, user, snapshot) {
+  print(
+      '${user.email} favourited ${documentNew['title']}! of the new with the ID = ${documentNew.documentID}!');
+  //documentUser.updateData({'favourites' : {'field1' : 'val1'}});
+  //documentUser.setData({'favourites' : {}, 'likes' : {}});
+  var m = snapshot.data['favourites'];
+  if (m[documentNew.documentID] == null)  // favourite
+    m[documentNew.documentID] = documentNew.documentID;
+  else  // un-favourite
+    m.remove(documentNew.documentID);
+  documentUser.updateData({'favourites' : m});
 }
 
 Widget nullContainer() {
