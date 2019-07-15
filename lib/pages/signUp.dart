@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import './signIn.dart';
-import '../errors/passwordsNotMatching.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
-import 'package:redux_logging/redux_logging.dart';
+import 'package:newsapp/state_view_model.dart';
 import '../models/app_state.dart';
-import '../reducers/app_reducer.dart';
-import '../actions/actions.dart';
 
 class SignUp extends StatefulWidget {
   State<SignUp> createState() {
@@ -16,18 +10,14 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  Store<AppState> store = Store(appReducer,
-      initialState: AppState(email: '', password: '', retypedPassword: ''),
-      middleware: [
-        LoggingMiddleware<dynamic>.printer(),
-      ]);
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   Widget build(BuildContext context) {
-    return StoreProvider<AppState>(
-      store: store,
-      child: Scaffold(
-        body: SizedBox(
+    Map<String, String> _loginData = {};
+    return Scaffold(
+      body: StoreConnector<AppState, StateViewModel>(
+        converter: (store) => StateViewModel.fromStore(store),
+        builder: (context, stateViewModel) => SizedBox(
           child: Form(
             key: _key,
             child: Container(
@@ -39,54 +29,45 @@ class _SignUpState extends State<SignUp> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        StoreConnector<AppState, String>(
-                          converter: (store) => store.state.email,
-                          builder: (context, arg) => TextFormField(
-                            validator: (input) {
-                              if (input.length < 5) return 'Invalid e-mail';
-                            },
-                            onSaved: (input) {
-                              //_email = input;
-                              store.dispatch(UpdateEmail(input));
-                            },
-                            decoration: InputDecoration(labelText: 'E-mail'),
-                          ),
+                        TextFormField(
+                          validator: (input) {
+                            if (input.length < 5)
+                              return 'Invalid e-mail';
+                          },
+                          onSaved: (input) {
+                            //_email = input;
+                            _loginData['email'] = input;
+                          },
+                          decoration: InputDecoration(labelText: 'E-mail'),
                         ),
-                        StoreConnector<AppState, String>(
-                          converter: (store) => store.state.password,
-                          builder: (context, arg) => TextFormField(
-                            validator: (input) {
-                              if (input.length < 5) return 'Invalid password';
-                            },
-                            onSaved: (input) {
-                              //_password = input;
-                              store.dispatch(UpdatePassword(input));
-                              print('READ: ${store.state.password}');
-                            },
-                            decoration: InputDecoration(labelText: 'Password'),
-                          ),
+                        TextFormField(
+                          validator: (input) {
+                            if (input.length < 5)
+                              return 'Invalid password';
+                          },
+                          onSaved: (input) {
+                            //_password = input;
+                            _loginData['password'] = input;
+                          },
+                          decoration: InputDecoration(labelText: 'Password'),
                         ),
-                        StoreConnector<AppState, String>(
-                          converter: (store) => store.state.retypedPassword,
-                          builder: (context, arg) => TextFormField(
-                            validator: (input) {
-                              if (input.length < 5) return 'Invalid password';
-                            },
-                            onSaved: (input) {
-                              //_password = input;
-                              store.dispatch(UpdateRetypedPassword(input));
-                            },
-                            decoration: InputDecoration(labelText: 'Password'),
-                          ),
+                        TextFormField(
+                          validator: (input) {
+                            if (input.length < 5) return 'Invalid password';
+                          },
+                          onSaved: (input) {
+                            //_password = input;
+                            _loginData['retypedPassword'] = input;
+                          },
+                          decoration: InputDecoration(labelText: 'Password'),
                         ),
-                        StoreConnector<AppState, AppState>(
-                          converter: (store) => store.state,
-                          builder: (context, arg) => RaisedButton(
-                            child: Text('Sign up'),
-                            onPressed: () {
-                              navigateToHome();
-                            },
-                          ),
+                        RaisedButton(
+                          child: Text('Sign up'),
+                          onPressed: () {
+                            if (_key.currentState.validate())
+                              _key.currentState.save();
+                            stateViewModel.navigateToSignIn(_loginData);
+                          },
                         ),
                       ],
                     ),
@@ -113,45 +94,6 @@ class _SignUpState extends State<SignUp> {
         ),
       ),
     );
-  }
-
-  void navigateToHome() async {
-    final _formState = _key.currentState;
-    if (_formState.validate()) {
-      _formState.save();
-      if (store.state.password != store.state.retypedPassword) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PasswordsNotMatching(messages: [
-                      'Whoops!',
-                      'Passwords not matching!',
-                      'Try again.'
-                    ])));
-      } else {
-        try {
-          FirebaseUser user = await FirebaseAuth.instance
-              .createUserWithEmailAndPassword(
-                  email: store.state.email, password: store.state.password);
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => SignIn()));
-        } catch (e) {
-          print(e);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PasswordsNotMatching(
-                messages: [
-                  'Whoops!',
-                  'This user already exists!',
-                  'Try again.'
-                ],
-              ),
-            ),
-          );
-        }
-      }
-    }
   }
 
   void navigatePop() {

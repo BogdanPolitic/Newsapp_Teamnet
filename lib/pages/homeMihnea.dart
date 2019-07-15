@@ -5,6 +5,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 int numCharactersOfPreview;
 
+class Entry {
+  final String title;
+  final String fullDescription;
+  final String imageUrl;
+
+  Entry(this.title, this.fullDescription, this.imageUrl);
+}
+
+class NewFormat {
+  final Widget title;
+  final Widget content;
+  final Widget image;
+
+  NewFormat(this.title, this.content, this.image);
+}
+
 class MyHome extends StatefulWidget {
   FirebaseUser user;
 
@@ -40,7 +56,7 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
       headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
         return <Widget>[
           SliverAppBar(
-            title: Text('Tab Controller Example'),
+            title: Text('Flutter redux demo'),
             pinned: true,
             floating: true,
             forceElevated: boxIsScrolled,
@@ -123,7 +139,7 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
       ),
       body: StreamBuilder<DocumentSnapshot>(
           stream: Firestore.instance
-              .collection('users_and_news_collection')
+              .collection('usersAndNews')
               .document('info')
               .collection('users')
               .document(widget.user.uid)
@@ -160,6 +176,7 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
 }
 
 class PageOne extends StatelessWidget {
+  List<Entry> entries = [];
   final FirebaseUser user;
   final AsyncSnapshot<DocumentSnapshot> snapshot;
 
@@ -179,74 +196,74 @@ class PageOne extends StatelessWidget {
           return ListView(
             children: snapshot.data.documents
                 .map((DocumentSnapshot document) => Container(
-                      margin: EdgeInsets.all(5.0),
-                      padding: EdgeInsets.all(5.0),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                            width: 1.0,
-                            color: Colors.grey,
-                            style: BorderStyle.solid,
+              margin: EdgeInsets.all(5.0),
+              padding: EdgeInsets.all(5.0),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    width: 1.0,
+                    color: Colors.grey,
+                    style: BorderStyle.solid,
+                  ),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    //height: MediaQuery.of(context).size.height * 0.2,
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          document.data['title'],
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30,
+                          ),
+                        ),
+                        Text(
+                          previewOf(
+                            document.data['content'],
+                            85,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.2,
+                        height:
+                        MediaQuery.of(context).size.height * 0.1,
+                        decoration: BoxDecoration(
+                          border: Border.all(),
+                        ),
+                        child: FittedBox(
+                          child: Image.network(
+                            document.data['imageUrl'],
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.6,
-                            //height: MediaQuery.of(context).size.height * 0.2,
-                            child: Column(
-                              children: <Widget>[
-                                Text(
-                                  document.data['title'],
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 30,
-                                  ),
-                                ),
-                                Text(
-                                  previewOf(
-                                    document.data['content'],
-                                    85,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.2,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.1,
-                                decoration: BoxDecoration(
-                                  border: Border.all(),
-                                ),
-                                child: FittedBox(
-                                  child: Image.network(
-                                    document.data['imageUrl'],
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              InkWell(
-                                child: Text('more details',
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                      fontStyle: FontStyle.italic,
-                                    )),
-                                onTap: () {
-                                  _settingModalBottomSheet(
-                                      context, _width, _height, document, user);
-                                },
-                              ),
-                            ],
-                          ),
-                        ],
+                      InkWell(
+                        child: Text('more details',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontStyle: FontStyle.italic,
+                            )),
+                        onTap: () {
+                          _settingModalBottomSheet(
+                              context, _width, _height, document, user);
+                        },
                       ),
-                    ))
+                    ],
+                  ),
+                ],
+              ),
+            ))
                 .toList(),
           );
         });
@@ -284,81 +301,81 @@ class PageTwo extends StatelessWidget {
                   children: snapshotNew.data.documents
                       .map((DocumentSnapshot document) {
                     return snapshotUser.data['favourites']
-                                [document.documentID] ==
-                            null
+                    [document.documentID] ==
+                        null
                         ? nullContainer()
                         : Container(
-                            margin: EdgeInsets.all(5.0),
-                            padding: EdgeInsets.all(5.0),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  width: 1.0,
-                                  color: Colors.grey,
-                                  style: BorderStyle.solid,
-                                ),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      margin: EdgeInsets.all(5.0),
+                      padding: EdgeInsets.all(5.0),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            width: 1.0,
+                            color: Colors.grey,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Container(
+                            width:
+                            MediaQuery.of(context).size.width * 0.6,
+                            //height: MediaQuery.of(context).size.height * 0.2,
+                            child: Column(
                               children: <Widget>[
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.6,
-                                  //height: MediaQuery.of(context).size.height * 0.2,
-                                  child: Column(
-                                    children: <Widget>[
-                                      Text(
-                                        document.data['title'],
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 30,
-                                        ),
-                                      ),
-                                      Text(
-                                        previewOf(
-                                          document.data['content'],
-                                          85,
-                                        ),
-                                      ),
-                                    ],
+                                Text(
+                                  document.data['title'],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 30,
                                   ),
                                 ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.2,
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.1,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(),
-                                      ),
-                                      child: FittedBox(
-                                        child: Image.network(
-                                          document.data['imageUrl'],
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    InkWell(
-                                      child: Text('more details',
-                                          style: TextStyle(
-                                            color: Colors.blue,
-                                            fontStyle: FontStyle.italic,
-                                          )),
-                                      onTap: () {
-                                        _settingModalBottomSheet(context,
-                                            _width, _height, document, user);
-                                      },
-                                    ),
-                                  ],
+                                Text(
+                                  previewOf(
+                                    document.data['content'],
+                                    85,
+                                  ),
                                 ),
                               ],
                             ),
-                          );
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                width: MediaQuery.of(context).size.width *
+                                    0.2,
+                                height:
+                                MediaQuery.of(context).size.height *
+                                    0.1,
+                                decoration: BoxDecoration(
+                                  border: Border.all(),
+                                ),
+                                child: FittedBox(
+                                  child: Image.network(
+                                    document.data['imageUrl'],
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              InkWell(
+                                child: Text('more details',
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontStyle: FontStyle.italic,
+                                    )),
+                                onTap: () {
+                                  _settingModalBottomSheet(context,
+                                      _width, _height, document, user);
+                                },
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
                   }).toList(),
                 );
               });
@@ -423,30 +440,30 @@ Widget modalComponent(documentNew, field, user) {
                 children: [Icons.thumb_up, Icons.favorite]
                     .map(
                       (iconData) => InkWell(
-                          child: Transform.scale(
-                            scale: 2,
-                            child: Icon(
-                              iconData,
-                              color: (iconData == Icons.thumb_up) &&
-                                      (snapshot.data['likes']
-                                              [documentNew.documentID] ==
-                                          null)
-                                  ? Colors.grey
-                                  : Colors.blue,
-                            ),
-                          ),
-                          onTap: () {
-                            buttonActionMap[iconData](
-                                documentNew,
-                                Firestore.instance
-                                    .collection('usersAndNews')
-                                    .document('info')
-                                    .collection('users')
-                                    .document(user.uid),
-                                user,
-                                snapshot);
-                          }),
-                    )
+                      child: Transform.scale(
+                        scale: 2,
+                        child: Icon(
+                          iconData,
+                          color: (iconData == Icons.thumb_up) &&
+                              (snapshot.data['likes']
+                              [documentNew.documentID] ==
+                                  null)
+                              ? Colors.grey
+                              : Colors.blue,
+                        ),
+                      ),
+                      onTap: () {
+                        buttonActionMap[iconData](
+                            documentNew,
+                            Firestore.instance
+                                .collection('usersAndNews')
+                                .document('info')
+                                .collection('users')
+                                .document(user.uid),
+                            user,
+                            snapshot);
+                      }),
+                )
                     .toList(),
               ),
             );

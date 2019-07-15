@@ -1,47 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:newsapp/state_view_model.dart';
 import 'package:redux/redux.dart';
 import 'models/app_state.dart';
-
-//class ButtonBeLike extends StatelessWidget {
-//
-//  int buttonIdx;
-//
-//  ButtonBeLike(int buttonIdx) {
-//    this.buttonIdx = buttonIdx;
-//  }
-//
-//
-//
-//  @override
-//  Widget build(BuildContext context) {
-//
-////    print(MediaQuery.of(context).size.width * 0.25);
-//
-//    return StoreConnector(
-//      converter: (Store<AppState> store) => store.state,
-//      builder: (BuildContext context, AppState appState) {
-//
-//        return CheckboxListTile(
-//          title: Text(data),
-//          value: true,
-//          onChanged: makeChange,
-//        );
-//
-////        return Row (
-////          children: <Widget>[
-////            Icon(Icons.check_box_outline_blank),
-//////            appState.buttonCheckers[buttonIdx] ?
-////            SizedBox (
-////              width: MediaQuery.of(context).size.width * 0.25,
-////            ),
-////          ],
-////        );
-//      }
-//
-//    );
-//  }
-//}
 
 class FilterButtons {
   FilterButtons(this.name) {
@@ -61,14 +22,6 @@ class MakeFilterButtons extends StatelessWidget {
     FilterButtons('Celebrities'),
   ];
 
-  int returnNumList() {
-    return buttonFilterArr.length;
-  }
-
-  void makeChange(bool myVal) {
-    myVal = !myVal;
-  }
-
   @override
   Widget build(BuildContext context) {
 
@@ -78,26 +31,19 @@ class MakeFilterButtons extends StatelessWidget {
       itemBuilder: (context, index) => GestureDetector(
 //        onTap: ,
         child: StoreConnector(
-            converter: (Store<AppState> store) => store.state,
-            builder: (BuildContext context, AppState appState) {
+            converter: (Store<AppState> store) => StateViewModel.fromStore(store),
+            builder: (BuildContext context, StateViewModel stateViewModel) {
 
               return CheckboxListTile(
                 title: Text(buttonFilterArr[index].name),
-                value: appState.buttonCheckers[index],
-                onChanged: makeChange,
+                value: stateViewModel.buttonCheckers[index],
+                onChanged: (bool someVal) {
+                  stateViewModel.changeCecker(index);
+                },
+//                onChanged: (covariant) => StoreProvider.of<AppState>(context)
+//                    .dispatch(TestAction(appState.buttonCheckers[index])),
               );
-
-//        return Row (
-//          children: <Widget>[
-//            Icon(Icons.check_box_outline_blank),
-////            appState.buttonCheckers[buttonIdx] ?
-//            SizedBox (
-//              width: MediaQuery.of(context).size.width * 0.25,
-//            ),
-//          ],
-//        );
             }
-
         ),
       ),
     );

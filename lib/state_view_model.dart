@@ -18,6 +18,7 @@ class StateViewModel {
       String retypedPassword,
       ) updateLoginData;
   Function(Map<String, String> loginData) navigateToHome;
+  Function(Map<String, String> loginData) navigateToSignIn;
 
   StateViewModel({
     this.sortNameOrDate,
@@ -30,6 +31,7 @@ class StateViewModel {
     this.testAction,
     this.updateLoginData,
     this.navigateToHome,
+    this.navigateToSignIn,
   });
 
   factory StateViewModel.fromStore(Store<AppState> store) => StateViewModel(
@@ -59,5 +61,7 @@ class StateViewModel {
             retypedPassword: retypedPassword)),
     navigateToHome: (loginData) => store.dispatch(NavigateToHome(
         email: loginData['email'], password: loginData['password'])),
+    navigateToSignIn: (loginData) => store.dispatch(NavigateToSignIn(
+        email: loginData['email'], password: loginData['password'], retypedPassword: loginData['retypedPassword'])),
   );
 }

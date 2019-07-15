@@ -7,7 +7,6 @@ class Home extends StatelessWidget {
   Home({this.user});
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       body: SizedBox(
         child: Container(
