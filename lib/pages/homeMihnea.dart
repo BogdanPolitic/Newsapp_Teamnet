@@ -57,7 +57,7 @@ class MyHome extends StatelessWidget {
               title: Text(
                 'Filters',
                 style: TextStyle(
-                fontSize: MediaQuery.of(context).size.height * 0.025,
+                  fontSize: MediaQuery.of(context).size.height * 0.025,
                 ),
               ),
               children: <Widget>[
@@ -77,8 +77,40 @@ class MyHome extends StatelessWidget {
         builder: (context, StateViewModel stateViewModel) {
           return Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                Container (
+                  height: MediaQuery.of(context).size.height * 0.10,
+                  decoration: BoxDecoration(
+                    color: Colors.lightBlueAccent,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Switch (
+                        activeColor: Colors.orangeAccent,
+                        activeTrackColor: Colors.white,
+                        inactiveThumbColor: Colors.orangeAccent,
+                        inactiveTrackColor: Colors.white,
+                        value: stateViewModel.switchNameOrDate,
+                        onChanged: (bool someVal) {
+                          print(stateViewModel.switchNameOrDate);
+                          stateViewModel.sortNameOrDate();
+                        },
+                      ),
+                      Switch (
+                        activeColor: Colors.orangeAccent,
+                        activeTrackColor: Colors.white,
+                        inactiveThumbColor: Colors.orangeAccent,
+                        inactiveTrackColor: Colors.white,
+                        value: stateViewModel.switchIncOrDec,
+                        onChanged: (bool someVal) {
+                          stateViewModel.sortIncOrDec();
+                        },
+                      ),
+
+                    ],
+                  ),
+                ),
                 Text(
                   'Redux is working: ${!stateViewModel.reduxSetup}',
                   style: TextStyle(
@@ -86,16 +118,16 @@ class MyHome extends StatelessWidget {
                   ),
                 ),
                 RaisedButton(
-                  child: Text(
-                    'Dispatch action',
-                    style: TextStyle(
-                      fontSize: MediaQuery.of(context).size.height * 0.021,
+                    child: Text(
+                      'Dispatch action',
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.height * 0.021,
+                      ),
                     ),
-                  ),
-                  onPressed: () {
-                    print('aintrat');
-                    return stateViewModel.testAction();
-                  }
+                    onPressed: () {
+//                    print('aintrat');
+                      return stateViewModel.testAction();
+                    }
                 ),
                 Text(
                   '${user.email}',

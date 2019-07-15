@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:newsapp/pages/signIn.dart';
-import 'package:redux_logging/redux_logging.dart';
 import 'pages/welcome.dart';
 import 'package:flutter/services.dart';
 import 'package:redux/redux.dart';
@@ -17,9 +16,9 @@ class Keys {
 
 void main() {
   final store = Store<AppState>(
-    appReducer,
-    initialState: AppState.initial(),
-    middleware: middlewares()
+      appReducer,
+      initialState: AppState.initial(),
+      middleware: middlewares()
   );
 
   SystemChrome.setPreferredOrientations([

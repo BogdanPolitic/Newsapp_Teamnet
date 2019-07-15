@@ -22,14 +22,6 @@ class MakeFilterButtons extends StatelessWidget {
     FilterButtons('Celebrities'),
   ];
 
-  int returnNumList() {
-    return buttonFilterArr.length;
-  }
-
-  void makeChange(bool myVal) {
-    myVal = !myVal;
-  }
-
   @override
   Widget build(BuildContext context) {
 
@@ -45,13 +37,13 @@ class MakeFilterButtons extends StatelessWidget {
               return CheckboxListTile(
                 title: Text(buttonFilterArr[index].name),
                 value: stateViewModel.buttonCheckers[index],
-                onChanged: makeChange,
+                onChanged: (bool someVal) {
+                  stateViewModel.changeCecker(index);
+                },
 //                onChanged: (covariant) => StoreProvider.of<AppState>(context)
 //                    .dispatch(TestAction(appState.buttonCheckers[index])),
               );
-
             }
-
         ),
       ),
     );

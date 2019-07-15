@@ -1,14 +1,11 @@
-class TestAction {
+class TestAction { }
+class ByNameOrDate { }
+class IncrOrDecr { }
 
-}
+class ChangeChecker {
+  final int index;
 
-class ChangeFilterCheckers {
-  int checkerVal;
-
-  ChangeFilterCheckers(int checkerNewVal, List<bool> myButtons) {
-    checkerVal = checkerNewVal;
-    myButtons[checkerNewVal];
-  }
+  ChangeChecker({this.index});
 }
 
 class UpdateLoginDataAction {
