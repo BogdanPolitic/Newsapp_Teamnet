@@ -27,6 +27,13 @@ dependencies:
   flutter_redux: ^0.5.3
   redux_logging: ^0.3.0
 
+  rxdart: ^0.22.0
+
+  cloud_firestore: ^0.12.5+1
+  google_maps_flutter: ^0.5.17
+  geolocator: ^5.0.1
+  geoflutterfire: ^2.0.2
+
   flutter:
     sdk: flutter
 

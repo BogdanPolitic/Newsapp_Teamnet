@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:newsapp/models/app_state.dart';
 import 'package:newsapp/state_view_model.dart';
+import 'package:newsapp/pages/map_screen.dart';
 //import 'package:flutter/services.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -30,11 +31,18 @@ class MyHome extends StatelessWidget {
                     margin: const EdgeInsets.all(5),
                     width: MediaQuery.of(context).size.width * 0.25,
                     height: MediaQuery.of(context).size.height * 0.125,
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
+
+                    child: CircleAvatar(
+
+                      backgroundColor: Colors.lightBlueAccent,
+                      child: Icon(Icons.person, color: Colors.black),
                     ),
-                  ),
+                    decoration: BoxDecoration(
+
+                      shape: BoxShape.circle,
+                      color: Colors.lightBlueAccent,
+                    ),
+    ),
                   Text(
                     'user\'s name here:',
                     style: TextStyle(
@@ -53,7 +61,26 @@ class MyHome extends StatelessWidget {
                 color: Colors.blue,
               ),
             ),
+            ListTile(
+              leading: Icon(
+                Icons.map,
+                color: Colors.black,
+              ),
+              title: Text(
+                'News Maps',
+                style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.height * 0.025,
+                )
+              ),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen()));
+              },
+            ),
             ExpansionTile(
+              leading: Icon(
+                Icons.sort,
+                color: Colors.black,
+              ),
               title: Text(
                 'Filters',
                 style: TextStyle(
@@ -104,7 +131,7 @@ class MyHome extends StatelessWidget {
                               },
                             ),
                             Text (
-                                'Date'
+                                'Name'
                             ),
                           ]
                         ),
