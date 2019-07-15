@@ -1,16 +1,7 @@
-// lib/main.dart
-// Gasit tutorial asemanator cu ce a facut Cristi astazi la prezentare
 import 'package:flutter/material.dart';
-
-//import 'package:flutter/services.dart';
-import 'package:redux/redux.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import '../models/models.dart';
-
-//import '../reducers/app_reducer.dart';
-import '../actions/actions.dart';
 import '../filtre_buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 int numCharactersOfPreview;
 
@@ -20,6 +11,14 @@ class Entry {
   final String imageUrl;
 
   Entry(this.title, this.fullDescription, this.imageUrl);
+}
+
+class NewFormat {
+  final Widget title;
+  final Widget content;
+  final Widget image;
+
+  NewFormat(this.title, this.content, this.image);
 }
 
 class MyHome extends StatefulWidget {
@@ -34,28 +33,24 @@ class MyHome extends StatefulWidget {
 
 class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
   TabController _tabController;
-  //TabController _modalTabController;
   ScrollController _scrollViewController;
-  //ScrollController _modalScrollViewController;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: 2);
-    //_modalTabController = TabController(vsync: this, length: 2);
     _scrollViewController = ScrollController(initialScrollOffset: 0.0);
-    //_modalScrollViewController = ScrollController(initialScrollOffset: 0.0);
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     _scrollViewController.dispose();
-    //_modalScrollViewController.dispose();
     super.dispose();
   }
 
-  Widget _content(BuildContext context) {
+  Widget _content(
+      BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
     return NestedScrollView(
       controller: _scrollViewController,
       headerSliverBuilder: (BuildContext context, bool boxIsScrolled) {
@@ -83,8 +78,8 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
       },
       body: TabBarView(
         children: <Widget>[
-          PageOne(),
-          PageTwo(),
+          PageOne(snapshot: snapshot, user: widget.user),
+          PageTwo(snapshot: snapshot, user: widget.user),
         ],
         controller: _tabController,
       ),
@@ -103,14 +98,8 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
                 children: <Widget>[
                   Container(
                     margin: const EdgeInsets.all(5),
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.25,
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.125,
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    height: MediaQuery.of(context).size.height * 0.125,
                     decoration: BoxDecoration(
                       color: Colors.red,
                       shape: BoxShape.circle,
@@ -119,19 +108,13 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
                   Text(
                     'user\'s name here:',
                     style: TextStyle(
-                      fontSize: MediaQuery
-                          .of(context)
-                          .size
-                          .height * 0.021,
+                      fontSize: MediaQuery.of(context).size.height * 0.021,
                     ),
                   ),
                   Text(
                     'user\'s email here: ${widget.user.email}',
                     style: TextStyle(
-                      fontSize: MediaQuery
-                          .of(context)
-                          .size
-                          .height * 0.021,
+                      fontSize: MediaQuery.of(context).size.height * 0.021,
                     ),
                   ),
                 ],
@@ -144,10 +127,7 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
               title: Text(
                 'Filters',
                 style: TextStyle(
-                  fontSize: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.025,
+                  fontSize: MediaQuery.of(context).size.height * 0.025,
                 ),
               ),
               children: <Widget>[
@@ -157,7 +137,25 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
           ],
         ),
       ),
-      body: _content(context),
+      body: StreamBuilder<DocumentSnapshot>(
+          stream: Firestore.instance
+              .collection('users_and_news_collection')
+              .document('info')
+              .collection('users')
+              .document(widget.user.uid)
+              .snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            }
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return Text('Loading..');
+              default:
+                return _content(context, snapshot);
+            }
+          }),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.control_point),
         onPressed: () {
@@ -178,267 +176,211 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
 }
 
 class PageOne extends StatelessWidget {
-  List<Entry> entries;
+  List<Entry> entries = [];
+  final FirebaseUser user;
+  final AsyncSnapshot<DocumentSnapshot> snapshot;
+
+  PageOne({this.snapshot, this.user});
+
   @override
   Widget build(BuildContext context) {
-    double _width = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double _height = MediaQuery
-        .of(context)
-        .size
-        .height;
-    entries = _populateEntries();
-    return ListView.builder(
-      itemCount: entries.length,
-      itemExtent: 250.0,
-      itemBuilder: (context, index) =>
-          Container(
-            margin: EdgeInsets.all(10.0),
-            padding: EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  width: 1.0,
-                  color: Colors.grey,
-                  style: BorderStyle.solid,
+    double _width = MediaQuery.of(context).size.width;
+    double _height = MediaQuery.of(context).size.height;
+    //Widget newFormat = _populateEntries(snapshot);
+    return StreamBuilder(
+        stream: Firestore.instance
+            .collection('usersAndNews')
+            .document('info')
+            .collection('news')
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          return ListView(
+            children: snapshot.data.documents
+                .map((DocumentSnapshot document) => Container(
+              margin: EdgeInsets.all(5.0),
+              padding: EdgeInsets.all(5.0),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    width: 1.0,
+                    color: Colors.grey,
+                    style: BorderStyle.solid,
+                  ),
                 ),
               ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.6,
-                  //height: MediaQuery.of(context).size.height * 0.2,
-                  child: Column(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    //height: MediaQuery.of(context).size.height * 0.2,
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          document.data['title'],
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 30,
+                          ),
+                        ),
+                        Text(
+                          previewOf(
+                            document.data['content'],
+                            85,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text(
-                        entries[index].title,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.2,
+                        height:
+                        MediaQuery.of(context).size.height * 0.1,
+                        decoration: BoxDecoration(
+                          border: Border.all(),
+                        ),
+                        child: FittedBox(
+                          child: Image.network(
+                            document.data['imageUrl'],
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                      Text(
-                        previewOf(
-                          entries[index].fullDescription,
-                          85,
-                        ),
+                      InkWell(
+                        child: Text('more details',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontStyle: FontStyle.italic,
+                            )),
+                        onTap: () {
+                          _settingModalBottomSheet(
+                              context,
+                              _width,
+                              _height,
+                              document,
+                              user
+                          );
+                        },
                       ),
                     ],
                   ),
-                ),
-                Column(
-                  //mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width * 0.2,
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .height * 0.1,
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                      ),
-                      child: FittedBox(
-                        child: Image.network(
-                          entries[index].imageUrl,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      child: Text('more details',
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontStyle: FontStyle.italic,
-                          )),
-                      onTap: () {
-                        _settingModalBottomSheet(
-                          context, _width, _height, entries[index],
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-    );
+                ],
+              ),
+            ))
+                .toList(),
+          );
+        });
   }
 }
 
 class PageTwo extends StatelessWidget {
-  List<Entry> entries;
+  final AsyncSnapshot<DocumentSnapshot> snapshot;
+  final FirebaseUser user;
+  PageTwo({this.snapshot, this.user});
   @override
   Widget build(BuildContext context) {
-    double _width = MediaQuery
-      .of(context)
-      .size
-      .width;
-  double _height = MediaQuery
-      .of(context)
-      .size
-      .height;
-    entries = _populateEntries();
-    return ListView.builder(
-      itemCount: entries.length,
-      itemExtent: 250.0,
-      itemBuilder: (context, index) =>
-          Container(
-            margin: EdgeInsets.all(10.0),
-            padding: EdgeInsets.all(10.0),
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  width: 1.0,
-                  color: Colors.grey,
-                  style: BorderStyle.solid,
-                ),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.6,
-                  //height: MediaQuery.of(context).size.height * 0.2,
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        entries[index].title,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                      Text(
-                        previewOf(
-                          entries[index].fullDescription,
-                          85,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Column(
-                  //mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width * 0.2,
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .height * 0.1,
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                      ),
-                      child: FittedBox(
-                        child: Image.network(
-                          entries[index].imageUrl,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    InkWell(
-                      child: Text('more details',
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontStyle: FontStyle.italic,
-                          )),
-                      onTap: () {
-                        _settingModalBottomSheet(
-                          context, _width, _height, entries[index],
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-    );
+    return Container();
   }
 }
 
-void _settingModalBottomSheet(context, width, height, entry) {
+void _settingModalBottomSheet(
+    context, width, height, document, user) {
+  //List<String> fields = ['title', 'content', 'imageUrl', 'buttons'];
   showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return ListView.builder(
-            itemCount: 3,
-            itemExtent: null,
-            itemBuilder: (context, index) => modalComponent(entry, index),
-        );
-      },
+    context: context,
+    builder: (BuildContext context) {
+      return ListView.builder(
+        itemCount: 4,
+        itemExtent: null,
+        itemBuilder: (context, index) => modalComponent(document, index, user),
+      );
+    },
   );
 }
 
-Widget modalComponent(entry, index) {
-  switch (index) {
+Widget modalComponent(document, field, user) {
+  Map<IconData, Function> buttonActionMap = {Icons.thumb_up : like, Icons.favorite : favourite};
+  switch (field) {
     case 0:
-      return Image.network(entry.imageUrl);
+      return Image.network(document.data['imageUrl']);
     case 1:
       return Container(
         padding: EdgeInsets.only(top: 20, bottom: 20),
         alignment: Alignment.center,
-        child:
-          Text(
-            entry.title,
+        child: Text(document.data['title'],
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 30,
-            )
-          ),
-
+            )),
       );
     case 2:
-      return Text(entry.fullDescription);
+      return Container(
+        padding: EdgeInsets.only(left: 15, right: 15),
+        child: Text(
+          '       ' + document.data['content'],
+          textAlign: TextAlign.justify,
+        ),
+      );
+    case 3:
+      return Container(
+        padding: EdgeInsets.only(top: 20, bottom: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [Icons.thumb_up, Icons.favorite]
+              .map((iconData) => InkWell(
+              child: Transform.scale(
+                scale: 2,
+                child: Icon(
+                  iconData,
+                  color: Colors.blue,
+                ),
+              ),
+              onTap: () {
+                buttonActionMap[iconData](document, user);
+              }
+          ),)
+              .toList(),
+        ),
+      );
     default:
-      return null;
+      return nullContainer();
   }
 }
 
-List<Entry> _populateEntries() {
-  List<Entry> l = [
-    Entry(
-      'McDonald\'s',
-      'McDonald\'s is an American fast food company, founded in 1940 as a restaurant operated by Richard and Maurice McDonald, in San Bernardino, California, United States. They rechristened their business as a hamburger stand, and later turned the company into a franchise, with the Golden Arches logo being introduced in 1953 at a location in Phoenix, Arizona. In 1955, Ray Kroc, a businessman, joined the company as a franchise agent and proceeded to purchase the chain from the McDonald brothers. McDonald\'s had its original headquarters in Oak Brook, Illinois, but moved its global headquarters to Chicago in early 2018.',
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/McDonald%27s_Golden_Arches.svg/240px-McDonald%27s_Golden_Arches.svg.png',
-    ),
-    Entry(
-      'Jupiter',
-      'Jupiter is the fifth planet from the Sun and the largest in the Solar System. It is a giant planet with a mass one-thousandth that of the Sun, but two-and-a-half times that of all the other planets in the Solar System combined. Jupiter and Saturn are gas giants; the other two giant planets, Uranus and Neptune, are ice giants. Jupiter has been known to astronomers since antiquity.[17] It is named after the Roman god Jupiter.[18] When viewed from Earth, Jupiter can reach an apparent magnitude of −2.94, bright enough for its reflected light to cast shadows,[19] and making it on average the third-brightest natural object in the night sky after the Moon and Venus.',
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Jupiter_and_its_shrunken_Great_Red_Spot.jpg/440px-Jupiter_and_its_shrunken_Great_Red_Spot.jpg',
-    ),
-    Entry(
-      'Insula Iubirii',
-      'Temptation Island – Insula iubirii“, un reality-show filmat pe plajele exotice din Thailanda care pune la încercare relaţia a patru cupluri, va debuta duminică, 26 aprilie, la Antena 1, de la ora 20:30.',
-      'https://adevarul.ro/assets/adevarul.ro/MRImage/2015/04/23/5538b4d5cfbe376e35787d1b/646x404.jpg',
-    ),
-    Entry(
-      'Brexit',
-      'In what could be his final interview as business secretary, Greg Clark didn\'t pull punches about the damage of a no-deal Brexit. Many Brexiteers call it Project Fear but Greg Clark says it is just the reality of his conversations with businesses up and down the country: thousands of jobs will be lost if the next prime minister presses on with a no-deal Brexit. In what could be his final interview as business secretary, Mr Clark didn\'t pull his punches about the damage a no-deal could do to UK business as he warned his colleagues that the "discussions and evidence business and industry has presented" over the last three years is not "somehow forgotten" in the rush to get Brexit across the line.His Brexiteer opponents believe that he - together with Chancellor Philip Hammond - have dragged their heels over no-deal planning and sought to frustrate the UK\'s departure from the EU.',
-      'https://e3.365dm.com/19/07/2048x1152/skynews-greg-clark-conservative_4715913.jpg?bypass-service-worker&20190712011516',
-    ),
-  ];
-  return l;
+String previewOf(String text, int numberOfCharacters) {
+  return '    ' + text.substring(0, numberOfCharacters - 1) + '...';
 }
 
-String previewOf(String text, int numberOfCharacters) {
-  return text.substring(0, numberOfCharacters - 1) + '...';
+Widget like(document, user) {
+  print('${user.email} liked ${document.data['title']} of the new with the ID = ${document.documentID}!');
+  return StreamBuilder(
+      stream: Firestore.instance.collection('usersAndNews').document('info').snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        return nullContainer();
+      }
+  );
+}
+
+Widget favourite(document, user) {
+  print('${user.email} favourited ${document['title']}! of the new with the ID = ${document.documentID}!');
+  List<String> favourites = document.data['favourites'];
+  favourites.add(document.documentID.toString());
+  document.data['favourites'].setData(favourites);
+  print('DECII : ' + document.uid.toString());
+  print("DECI: " + favourites.toString());
+  return StreamBuilder(
+      stream: Firestore.instance.collection('usersAndNews').document('info').snapshots(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        print('AJUNG');
+        return nullContainer();
+      }
+  );
+}
+
+Widget nullContainer() {
+  return Container(width: 0);
 }

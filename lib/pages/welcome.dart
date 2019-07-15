@@ -147,7 +147,7 @@ class RadialAnimation extends StatelessWidget {
                 email: 'hello434343@gmail.com', password: 'worldd');
             // / DEBUG
 
-            Navigator.push(context, new MaterialPageRoute(builder: (context) => MyHome(user: user)/*Authentication()*/));
+            Navigator.push(context, new MaterialPageRoute(builder: (context) => /*MyHome(user: user)*/Authentication()));
           },
         ),
       ),
