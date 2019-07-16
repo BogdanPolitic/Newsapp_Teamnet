@@ -42,7 +42,7 @@ class MyHome extends StatelessWidget {
                       shape: BoxShape.circle,
                       color: Colors.lightBlueAccent,
                     ),
-    ),
+                  ),
                   Text(
                     'user\'s name here:',
                     style: TextStyle(
@@ -67,10 +67,10 @@ class MyHome extends StatelessWidget {
                 color: Colors.black,
               ),
               title: Text(
-                'News Maps',
-                style: TextStyle(
-                  fontSize: MediaQuery.of(context).size.height * 0.025,
-                )
+                  'News Maps',
+                  style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.height * 0.025,
+                  )
               ),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => MapScreen()));
@@ -115,25 +115,25 @@ class MyHome extends StatelessWidget {
                     children: <Widget>[
                       Container(
                         child: Row(
-                          children: <Widget>[
-                            Text (
-                              'Title'
-                            ),
-                            Switch (
-                              activeColor: Colors.orangeAccent,
-                              activeTrackColor: Colors.white,
-                              inactiveThumbColor: Colors.orangeAccent,
-                              inactiveTrackColor: Colors.white,
-                              value: stateViewModel.switchNameOrDate,
-                              onChanged: (bool someVal) {
-                                print(stateViewModel.switchNameOrDate);
-                                stateViewModel.sortNameOrDate();
-                              },
-                            ),
-                            Text (
-                                'Name'
-                            ),
-                          ]
+                            children: <Widget>[
+                              Text (
+                                  'Title'
+                              ),
+                              Switch (
+                                activeColor: Colors.orangeAccent,
+                                activeTrackColor: Colors.white,
+                                inactiveThumbColor: Colors.orangeAccent,
+                                inactiveTrackColor: Colors.white,
+                                value: stateViewModel.switchNameOrDate,
+                                onChanged: (bool someVal) {
+                                  print(stateViewModel.switchNameOrDate);
+                                  stateViewModel.sortNameOrDate();
+                                },
+                              ),
+                              Text (
+                                  'Name'
+                              ),
+                            ]
                         ),
                       ),
                       VerticalDivider(
@@ -156,7 +156,7 @@ class MyHome extends StatelessWidget {
                               },
                             ),
                             Icon(
-                                Icons.arrow_downward,
+                              Icons.arrow_downward,
                             ),
                           ],
                         ),
