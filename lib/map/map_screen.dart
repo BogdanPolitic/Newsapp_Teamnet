@@ -4,7 +4,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:news_app/map_screen_news.dart';
 
 class MapScreen extends StatefulWidget {
   @override
@@ -38,10 +37,6 @@ class MapScreenState extends State<MapScreen> {
   static Future<DocumentReference> _addGeoPoint(Position pos) async {
     var pos = await Geolocator().getCurrentPosition();
    GeoFirePoint point = Geoflutterfire().point(latitude: pos.latitude, longitude: pos.longitude);
-    return Firestore.instance.collection('newsCoord').add({
-      'position' : point.data,
-      'name' : 'TEST TEST'
-    });
   }
 
   loadMarkers() {
@@ -54,7 +49,6 @@ class MapScreenState extends State<MapScreen> {
         }
       });
   }
-
   void initMarker(client, markerRef){
     var markerIDVal = markerRef;
     final MarkerId markerId = MarkerId(markerIDVal);
@@ -70,7 +64,6 @@ class MapScreenState extends State<MapScreen> {
      position: LatLng(client['location'].latitude, client['location'].longitude),
      markerId: markerId,
      infoWindow: infoWindow,
-
    );
 
 
@@ -92,7 +85,7 @@ class MapScreenState extends State<MapScreen> {
       home: Scaffold(
         appBar: AppBar(
           title: Text(
-            'Google map widget',
+            'News map',
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -109,32 +102,6 @@ class MapScreenState extends State<MapScreen> {
                 zoom: 11.0,
               ),
             ),
-//            Padding(
-//              padding: const EdgeInsets.all(16.0),
-//              child: Align(
-//                alignment: Alignment.bottomLeft,
-//                child: new FloatingActionButton(
-//                  onPressed: _onMapTypeButtonPressed,
-//                  child: new Icon(
-//                    Icons.map,
-//                    color: Colors.white,
-//                  ),
-//                ),
-//              ),
-//            ),
-//            Padding(
-//              padding: const EdgeInsets.all(16.0),
-//              child: Align(
-//                alignment: Alignment.bottomCenter,
-//                child: new FloatingActionButton(
-//                  onPressed: _onAddMarkerButtonPressed,
-//                  child: new Icon(
-//                    Icons.edit_location,
-//                    color: Colors.white,
-//                  ),
-//                ),
-//              ),
-//            ),
           ],
         ),
       ),
@@ -148,17 +115,6 @@ class MapScreenState extends State<MapScreen> {
   void _onMapCreated(GoogleMapController controller) {
     mapController.complete(controller);
   }
-
-//  void _onMapTypeButtonPressed() {
-//    setState(() {
-//      _currentMapType = _currentMapType == MapType.normal
-//          ? MapType.satellite
-//          : MapType.normal;
-//    });
-//  }
-
-
-
 
 }
 

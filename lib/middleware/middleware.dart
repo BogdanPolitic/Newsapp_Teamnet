@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:newsapp/actions/actions.dart';
-import 'package:newsapp/main.dart';
-import 'package:newsapp/models/app_state.dart';
-import 'package:newsapp/pages/homeMihnea.dart';
-import 'package:newsapp/pages/signIn.dart';
+import 'package:news_app/actions/actions.dart';
+import 'package:news_app/main.dart';
+import 'package:news_app/models/app_state.dart';
+import 'package:news_app/pages/homeMihnea.dart';
 import 'package:redux/redux.dart';
 
 List<Middleware<AppState>> middlewares() => [

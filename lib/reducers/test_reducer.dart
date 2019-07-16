@@ -1,5 +1,4 @@
-// lib/reducers/test_reducer.dart
-import 'package:newsapp/models/app_state.dart';
+import 'package:news_app/models/app_state.dart';
 import 'package:redux/redux.dart';
 import '../actions/actions.dart';
 
@@ -13,7 +12,7 @@ final reducers = combineReducers<AppState>([
 
 AppState _byNameOrDate(AppState state, ByNameOrDate action) {
   return state.copyWith(
-      switchNameOrDate: !state.switchNameOrDate,
+    switchNameOrDate: !state.switchNameOrDate,
   );
 }
 

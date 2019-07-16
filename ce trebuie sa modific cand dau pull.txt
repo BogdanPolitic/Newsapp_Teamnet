@@ -1,8 +1,0 @@
-1. lib - cod aplicatie (asta e logic, esential)
-2. gradle.properties - add this:
-
-android.useAndroidX=true
-android.enableJetifier=true
-
-3. pubspec.yaml
-4. test/widget_test.dart - change the wrong import (cause it's pointing to the old directory - as it was copy pasted)

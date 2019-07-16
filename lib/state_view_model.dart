@@ -1,5 +1,5 @@
-import 'package:newsapp/actions/actions.dart';
-import 'package:newsapp/models/app_state.dart';
+import 'package:news_app/actions/actions.dart';
+import 'package:news_app/models/app_state.dart';
 import 'package:redux/redux.dart';
 
 class StateViewModel {
