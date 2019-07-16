@@ -50,6 +50,7 @@ class _SignInState extends State<SignIn> {
                                 _loginData['password'] = input;
                               },
                               decoration: InputDecoration(labelText: 'Password'),
+                              obscureText: true,
                             ),
                           RaisedButton(
                               child: Text('Sign in'),

@@ -50,6 +50,7 @@ class _SignUpState extends State<SignUp> {
                             _loginData['password'] = input;
                           },
                           decoration: InputDecoration(labelText: 'Password'),
+                          obscureText: true,
                         ),
                         TextFormField(
                           validator: (input) {
@@ -60,6 +61,7 @@ class _SignUpState extends State<SignUp> {
                             _loginData['retypedPassword'] = input;
                           },
                           decoration: InputDecoration(labelText: 'Password'),
+                          obscureText: true,
                         ),
                         RaisedButton(
                           child: Text('Sign up'),
