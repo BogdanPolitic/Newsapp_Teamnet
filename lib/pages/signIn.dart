@@ -35,7 +35,6 @@ class _SignInState extends State<SignIn> {
                               return 'Invalid e-mail';
                           },
                           onSaved: (input) {
-                            //_email = input;
                             _loginData['email'] = input;
                           },
                           decoration: InputDecoration(labelText: 'E-mail'),
@@ -46,7 +45,6 @@ class _SignInState extends State<SignIn> {
                               return 'Invalid password';
                           },
                           onSaved: (input) {
-                            //_password = input;
                             _loginData['password'] = input;
                           },
                           decoration: InputDecoration(labelText: 'Password'),

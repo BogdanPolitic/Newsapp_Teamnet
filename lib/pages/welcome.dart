@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math.dart' show radians;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
-import 'homeMihnea.dart';
+import 'authentication.dart';
+import 'news.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class RadialMenu extends StatefulWidget {
@@ -145,7 +146,7 @@ class RadialAnimation extends StatelessWidget {
                 email: 'hello@gmail.com', password: 'worldd');
             // / DEBUG
 
-            Navigator.push(context, MaterialPageRoute(builder: (context) => MyHome(user: user,)));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Authentication()));
           },
         ),
       ),

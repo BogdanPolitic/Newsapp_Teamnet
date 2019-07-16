@@ -34,13 +34,14 @@ dev_dependencies:
   vector_math: ^2.0.8
   font_awesome_flutter: 8.4.0
   firebase_auth: ^0.11.1+7
+  firebase_storage: ^3.0.3
+  firebase_database: ^3.0.3
   cloud_firestore: ^0.12.5+1
   google_maps_flutter: ^0.5.17
   geolocator: ^5.0.1
   geoflutterfire: ^2.0.2
 #  location: 1.4.1
-
-#  firebase_core: ^0.4.0+5
+  firebase_core: ^0.4.0+6
 #  firebase_analytics: ^3.0.2
 #  firebase_messaging: ^5.0.3
 #  firebase_storage: ^3.0.1

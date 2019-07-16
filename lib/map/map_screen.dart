@@ -4,8 +4,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:news_app/pages/news.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MapScreen extends StatefulWidget {
+  final FirebaseUser user;
+  MapScreen({this.user});
+
   @override
   State<MapScreen> createState() => MapScreenState();
 }
@@ -55,7 +61,7 @@ class MapScreenState extends State<MapScreen> {
 
     InfoWindow infoWindow = InfoWindow(
       onTap: (){
-        //Navigator.push(context, route)
+        Navigator.push(context, MaterialPageRoute(builder: (context) => MyHome(user: widget.user)));
       },
       title: client['title'],
     );
@@ -77,13 +83,9 @@ class MapScreenState extends State<MapScreen> {
     loadMarkers();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: new ThemeData(
-        primaryColor: const Color(0xFF02BB9F),
-        primaryColorDark: const Color(0xFF167F67),
-        accentColor: const Color(0xFF02BB9F),
-      ),
       home: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.blue,
           title: Text(
             'News map',
             style: TextStyle(color: Colors.white),
