@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/map/map_screen.dart';
-import 'package:news_app/pages/addNew.dart';
+import 'package:news_app/pages/addNews.dart';
 import '../filtre_buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -243,7 +243,11 @@ class PageOne extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           return ListView(
             children: snapshot.data.documents
-                .map((DocumentSnapshot document) => Container(
+                .map((DocumentSnapshot document) => document.documentID
+                .substring(0, 7) !=
+                'id_new_'
+                ? nullContainer()
+                : Container(
               margin: EdgeInsets.all(5.0),
               padding: EdgeInsets.all(5.0),
               decoration: BoxDecoration(
@@ -266,13 +270,13 @@ class PageOne extends StatelessWidget {
                           document.data['title'],
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 30,
+                            fontSize: 20,
                           ),
                         ),
                         Text(
                           previewOf(
                             document.data['content'],
-                            85,
+                            55,
                           ),
                         ),
                       ],

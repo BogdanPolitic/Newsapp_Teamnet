@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 
 import 'news.dart';
 
@@ -55,7 +58,26 @@ class _AddNewState extends State<AddNew> {
                 },
                 decoration: InputDecoration(labelText: 'Description'),
               ),
-              RaisedButton(
+              TextFormField(
+                validator: (input) =>
+                input.length < 8 ? 'Please type a longer number' : null,
+                onSaved: (input) {
+                  newData['latitude'] = input;
+                },
+                decoration: InputDecoration(labelText: 'Latitude'),
+              ),
+              TextFormField(
+                validator: (input) =>
+                input.length < 8 ? 'Please type a longer number' : null,
+                onSaved: (input) {
+                  newData['longitude'] = input;
+                },
+                decoration: InputDecoration(labelText: 'Longitude'),
+              ),
+              StreamBuilder(
+                stream: Firestore.instance.collection('newsCoord').snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshotCoords) {
+              return RaisedButton(
                   child: Text('Submit'),
                   onPressed: () async {
                     final _formState = _key.currentState;
@@ -67,8 +89,18 @@ class _AddNewState extends State<AddNew> {
                       newsCollection.document('id_new_${greatestId + 1}').setData({
                         'content' : newData['content'],
                         'imageUrl' : newData['imageUrl'],
-                        'title' : newData['title']
+                        'title' : newData['title'],
+                        //'latitude' : newData['latitude'],
+                        //'longitude' : newData['longitude']
                       });
+                      CollectionReference coordsCollection = Firestore.instance.collection('newsCoord');
+                      coordsCollection.document('id_new_${greatestId + 1}').setData({
+                        'location' : LatLng(double.parse(newData['latitude']), double.parse(newData['longitude'])),
+                        'title' : newData['title'],
+                      });
+
+                      snapshotCoords.data.documents
+                          .map((doc) => print(doc.documentID));
 
                       print('id_new_${greatestId + 1}');
                       Navigator.pop(context);
@@ -79,7 +111,7 @@ class _AddNewState extends State<AddNew> {
                         ),
                       );*/
                     }
-                  }),
+                  });}),
             ],
           ),
         ),
