@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/map/map_screen.dart';
+import 'package:news_app/pages/addNew.dart';
 import '../filtre_buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -196,13 +197,26 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
                 return _content(context, snapshot);
             }
           }),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.control_point),
-        onPressed: () {
-          _tabController.animateTo(1,
-              curve: Curves.bounceInOut, duration: Duration(milliseconds: 10));
-          _scrollViewController
-              .jumpTo(_scrollViewController.position.maxScrollExtent);
+      floatingActionButton: StreamBuilder(
+        stream: Firestore.instance
+            .collection('usersAndNews')
+            .document('info')
+            .collection('news')
+            .document('greatest_id')
+            .snapshots(),
+        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          return FloatingActionButton(
+            child: Icon(Icons.control_point),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      AddNew(snapshot: snapshot, user: widget.user),
+                ),
+              );
+            },
+          );
         },
       ),
     );
