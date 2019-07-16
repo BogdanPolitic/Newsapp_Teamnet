@@ -7,11 +7,24 @@ import 'package:newsapp/pages/homeMihnea.dart';
 import 'package:newsapp/pages/signIn.dart';
 import 'package:redux/redux.dart';
 import 'package:newsapp/errors/passwordsNotMatching.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 List<Middleware<AppState>> middlewares() => [
   TypedMiddleware<AppState, NavigateToHome>(_navigateToHome),
   TypedMiddleware<AppState, NavigateToSignIn>(_navigateToSignIn),
 ];
+
+Widget createUserDocumentAndNavigate({user}) {
+  return StreamBuilder(
+    stream: Firestore.instance.collection('usersAndNews').document('info').collection('users').snapshots(),
+    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      Firestore.instance.collection('usersAndNews').document('info').collection('users').document('${user.uid}').setData({'favourites' : {}, 'likes' : {}});
+      print('HAHAHAHA ${user.uid}');
+      return SignIn();
+    }
+  );
+}
 
 void _navigateToHome(Store<AppState> store, NavigateToHome action, NextDispatcher next) async {
   try {
@@ -37,7 +50,7 @@ void _navigateToSignIn(Store<AppState> store, NavigateToSignIn action, NextDispa
     FirebaseUser user = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(
         email: action.email, password: action.password);
-    Keys.navKey.currentState.push(MaterialPageRoute(builder: (context) => SignIn()));
+    Keys.navKey.currentState.push(MaterialPageRoute(builder: (context) => createUserDocumentAndNavigate(user: user)));
   } catch (e) {
     print(e);
   }
