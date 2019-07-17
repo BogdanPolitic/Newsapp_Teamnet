@@ -5,6 +5,8 @@ import '../filtre_buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'authentication.dart';
+
 int numCharactersOfPreview;
 
 class Entry {
@@ -170,7 +172,8 @@ class _MyHomeState extends State<MyHome> with SingleTickerProviderStateMixin {
                   )
               ),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MyHome()));
+                FirebaseAuth.instance.signOut();
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Authentication()));
               },
             ),
 
@@ -495,10 +498,7 @@ Widget modalComponent(documentNew, field, user) {
                         scale: 2,
                         child: Icon(
                           iconData,
-                          color: (iconData == Icons.thumb_up) &&
-                              (snapshot.data['likes']
-                              [documentNew.documentID] ==
-                                  null)
+                          color: likedOrFavourited(iconData, snapshot, documentNew)
                               ? Colors.grey
                               : Colors.blue,
                         ),
@@ -522,6 +522,17 @@ Widget modalComponent(documentNew, field, user) {
     default:
       return nullContainer();
   }
+}
+
+bool likedOrFavourited(iconData, snapshot, documentNew) {
+  return ((iconData == Icons.thumb_up) &&
+      (snapshot.data['likes']
+      [documentNew.documentID] ==
+          null)) ||
+      ((iconData == Icons.favorite) &&
+          (snapshot.data['favourites']
+          [documentNew.documentID] ==
+              null));
 }
 
 String previewOf(String text, int numberOfCharacters) {
