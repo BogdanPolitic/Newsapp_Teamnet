@@ -1,13 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:newsapp/actions/actions.dart';
-import 'package:newsapp/main.dart';
-import 'package:newsapp/models/app_state.dart';
-import 'package:newsapp/pages/homeMihnea.dart';
-import 'package:newsapp/pages/signIn.dart';
+import 'package:news_app/actions/actions.dart';
+import 'package:news_app/main.dart';
+import 'package:news_app/models/app_state.dart';
+import 'package:news_app/pages/news.dart';
+import 'package:news_app/pages/signIn.dart';
 import 'package:redux/redux.dart';
-import 'package:newsapp/errors/passwordsNotMatching.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:news_app/errors/passwordsNotMatching.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 List<Middleware<AppState>> middlewares() => [
@@ -17,12 +16,12 @@ List<Middleware<AppState>> middlewares() => [
 
 Widget createUserDocumentAndNavigate({user}) {
   return StreamBuilder(
-    stream: Firestore.instance.collection('usersAndNews').document('info').collection('users').snapshots(),
-    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-      Firestore.instance.collection('usersAndNews').document('info').collection('users').document('${user.uid}').setData({'favourites' : {}, 'likes' : {}});
-      print('HAHAHAHA ${user.uid}');
-      return SignIn();
-    }
+      stream: Firestore.instance.collection('usersAndNews').document('info').collection('users').snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        Firestore.instance.collection('usersAndNews').document('info').collection('users').document('${user.uid}').setData({'favourites' : {}, 'likes' : {}});
+        print('HAHAHAHA ${user.uid}');
+        return SignIn();
+      }
   );
 }
 

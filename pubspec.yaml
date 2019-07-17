@@ -1,7 +1,6 @@
-name: newsapp
-description: A new Flutter project.
+name: news_app
+description: A new Flutter application.
 
-uses-material-design: true
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -19,29 +18,40 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
-  vector_math: ^2.0.8
-  font_awesome_flutter: 8.4.0
-  firebase_auth: ^0.11.1+7
-  redux: ^3.0.0
-  flutter_redux: ^0.5.3
-  redux_logging: ^0.3.0
-  cloud_firestore: ^0.12.6
-
   flutter:
     sdk: flutter
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  redux: ^3.0.0
+  flutter_redux: ^0.5.3
+  redux_logging: ^0.3.0
+  rxdart: ^0.22.0
+  vector_math: ^2.0.8
+  font_awesome_flutter: 8.4.0
+  firebase_auth: ^0.11.1+7
+  firebase_storage: ^3.0.3
+  firebase_database: ^3.0.3
+  cloud_firestore: ^0.12.5+1
+  google_maps_flutter: ^0.5.17
+  geolocator: ^5.0.1
+  geoflutterfire: ^2.0.2
+#  location: 1.4.1
+  firebase_core: ^0.4.0+6
+#  firebase_analytics: ^3.0.2
+#  firebase_messaging: ^5.0.3
+#  firebase_storage: ^3.0.1
+#  firebase_remote_config: ^0.2.0+3
+#  firebase_performance: ^0.3.0
 
 
 # For information on the generic Dart part of this file, see the
-# following page: https://www.dartlang.org/tools/pub/pubspec
+# following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:

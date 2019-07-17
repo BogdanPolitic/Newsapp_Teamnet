@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:newsapp/pages/signIn.dart';
-import 'pages/welcome.dart';
 import 'package:flutter/services.dart';
+import 'package:news_app/pages/signIn.dart';
+import 'pages/welcome.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import './models/app_state.dart';
 import './reducers/app_reducer.dart';
 import 'middleware/middleware.dart';
-//import './actions/actions.dart';
-//import './filtre_buttons.dart';
 
+//void main() async {
+//  final Firestore firestore = Firestore.instance;
+//  await firestore.settings(persistenceEnabled:false, timestampsInSnapshotsEnabled: true);
+//  runApp(MyApp());
+//}
 class Keys {
   static final navKey = GlobalKey<NavigatorState>();
 }
@@ -41,7 +44,7 @@ void main() {
     ),
   );
 }
-//void main() => runApp(MyApp());
+
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

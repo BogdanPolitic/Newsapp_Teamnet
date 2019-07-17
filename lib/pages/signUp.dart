@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:newsapp/state_view_model.dart';
+import '../state_view_model.dart';
 import '../models/app_state.dart';
 
 class SignUp extends StatefulWidget {
